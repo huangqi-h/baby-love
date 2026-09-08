@@ -37,6 +37,7 @@
         <text wx:if="{{item.id === baby.id}}" class="sw-check">✓</text>
       </view>
       <view class="switcher-manage" bindtap="goBabies">＋ 管理宝宝</view>
+      <view class="switcher-manage" bindtap="goAddBaby">＋ 添加宝宝</view>
     </view>
   </view>
 

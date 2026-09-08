@@ -124,6 +124,14 @@ Page({
     wx.navigateTo({ url: '/pages/babies/babies' })
   },
 
+  goAddBaby() {
+    this.setData({ showSwitcher: false })
+    wx.navigateTo({
+      url: '/pages/baby-form/baby-form',
+      fail: (err) => wx.showToast({ title: '打开失败:' + (err.errMsg || ''), icon: 'none' })
+    })
+  },
+
   goVaccine() {
     wx.navigateTo({ url: '/pages/vaccine/vaccine' })
   },

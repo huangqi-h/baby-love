@@ -20,11 +20,17 @@ Page({
     wx.showToast({ title: '已切换', icon: 'success' })
   },
   addBaby() {
-    wx.navigateTo({ url: '/pages/baby-form/baby-form' })
+    wx.navigateTo({
+      url: '/pages/baby-form/baby-form',
+      fail: (err) => wx.showToast({ title: '打开失败:' + (err.errMsg || ''), icon: 'none' })
+    })
   },
   editBaby(e) {
     const id = e.currentTarget.dataset.id
-    wx.navigateTo({ url: '/pages/baby-form/baby-form?id=' + id })
+    wx.navigateTo({
+      url: '/pages/baby-form/baby-form?id=' + id,
+      fail: (err) => wx.showToast({ title: '打开失败:' + (err.errMsg || ''), icon: 'none' })
+    })
   },
   deleteBaby(e) {
     const id = e.currentTarget.dataset.id
