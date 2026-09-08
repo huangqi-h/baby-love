@@ -55,6 +55,68 @@
   color: #555;
 }
 
+.vac-card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 24rpx 28rpx;
+  margin-bottom: 8rpx;
+  box-shadow: 0 6rpx 20rpx rgba(0, 0, 0, 0.05);
+  border-left: 8rpx solid #ffb3c0;
+}
+
+.vac-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+
+.vac-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #e2657a;
+}
+
+.vac-more {
+  font-size: 24rpx;
+  color: #ff6b81;
+}
+
+.vac-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12rpx 0;
+  border-top: 1rpx solid #f6f6f6;
+}
+
+.vac-name {
+  font-size: 26rpx;
+  color: #444;
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.vac-tag {
+  font-size: 22rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  margin-left: 16rpx;
+  flex-shrink: 0;
+}
+
+.vac-tag.soon {
+  background: #fff3cd;
+  color: #b8860b;
+}
+
+.vac-tag.overdue {
+  background: #ffe0e0;
+  color: #e25454;
+}
+
 .empty-box {
   text-align: center;
   padding: 80rpx 40rpx;
