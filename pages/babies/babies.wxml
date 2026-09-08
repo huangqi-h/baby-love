@@ -1,0 +1,22 @@
+<view class="container">
+
+  <view class="section-title">我的宝宝（{{babies.length}}）</view>
+
+  <view class="baby-list">
+    <view class="baby-row card" wx:for="{{babies}}" wx:key="id">
+      <view class="br-avatar">{{item.avatar || '👶'}}</view>
+      <view class="br-info">
+        <view class="br-name">{{item.name}}</view>
+        <view class="br-sub">{{item.gender === 'boy' ? '小王子' : (item.gender === 'girl' ? '小公主' : '宝宝')}} · {{item.birthday}}</view>
+      </view>
+      <view class="br-actions">
+        <view wx:if="{{item.id === currentId}}" class="br-current">当前</view>
+        <view wx:else class="br-switch" data-id="{{item.id}}" bindtap="switchTo">切换</view>
+        <view class="br-edit" data-id="{{item.id}}" bindtap="editBaby">编辑</view>
+        <view class="br-del" data-id="{{item.id}}" bindtap="deleteBaby">删除</view>
+      </view>
+    </view>
+  </view>
+
+  <button class="btn-primary add-btn" bindtap="addBaby">＋ 添加宝宝</button>
+</view>

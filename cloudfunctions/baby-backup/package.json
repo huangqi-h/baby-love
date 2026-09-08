@@ -1,0 +1,9 @@
+{
+  "name": "baby-backup",
+  "version": "1.0.0",
+  "description": "宝宝成长记录云备份",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

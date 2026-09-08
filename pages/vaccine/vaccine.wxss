@@ -1,0 +1,94 @@
+.section-title {
+  margin: 8rpx 8rpx 20rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #555;
+}
+
+.vac-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+  border-left: 8rpx solid #ddd;
+}
+
+.vac-item.done {
+  opacity: 0.6;
+}
+
+.vac-item.soon {
+  border-left-color: #ffa94d;
+}
+
+.vac-item.overdue {
+  border-left-color: #ff6b81;
+}
+
+.vac-main {
+  flex: 1;
+}
+
+.vac-name {
+  font-size: 30rpx;
+  color: #333;
+}
+
+.vac-sub {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #999;
+}
+
+.vac-status {
+  font-size: 24rpx;
+  padding: 8rpx 20rpx;
+  border-radius: 999rpx;
+  background: #f0f0f0;
+  color: #888;
+}
+
+.vac-status.soon {
+  background: #fff3e0;
+  color: #ffa94d;
+}
+
+.vac-status.overdue {
+  background: #ffe3e8;
+  color: #ff6b81;
+}
+
+.vac-check {
+  margin-left: 16rpx;
+  font-size: 40rpx;
+  color: #4dabf7;
+}
+
+.sub-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff7f8;
+  border-radius: 16rpx;
+  padding: 16rpx 24rpx;
+  margin-bottom: 20rpx;
+}
+
+.sub-tip {
+  font-size: 24rpx;
+  color: #b07a82;
+  flex: 1;
+}
+
+.sub-btn {
+  background: linear-gradient(135deg, #ff9a9e, #ff6b81);
+  color: #fff;
+  font-size: 24rpx;
+  margin: 0;
+  padding: 0 28rpx;
+  line-height: 56rpx;
+}
+
+.sub-btn::after {
+  border: none;
+}

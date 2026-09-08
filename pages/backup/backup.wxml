@@ -1,0 +1,18 @@
+<view class="container">
+
+  <view class="card backup-card">
+    <view class="bk-title">本地备份 / 恢复</view>
+    <view class="bk-desc">导出会把全部宝宝数据复制到剪贴板，可粘贴保存到备忘录；导入则从剪贴板读取并覆盖恢复。</view>
+    <button class="btn-primary bk-btn" bindtap="onExport">导出到剪贴板</button>
+    <button class="bk-btn backup-outline" bindtap="onImport">从剪贴板导入</button>
+    <view wx:if="{{status}}" class="bk-status">{{status}}</view>
+  </view>
+
+  <view class="card backup-card">
+    <view class="bk-title">微信云备份</view>
+    <view class="bk-desc">开启后可将数据备份到微信云开发，支持跨设备恢复。需开通云开发并配置环境 ID（详见 utils/cloud.js 注释）。</view>
+    <button class="bk-btn backup-outline" bindtap="onCloudUpload">上传到云端</button>
+    <button class="bk-btn backup-outline" bindtap="onCloudDownload">从云端恢复</button>
+    <view wx:if="{{!cloudEnabled}}" class="cloud-off">当前未开启云同步</view>
+  </view>
+</view>

@@ -4,7 +4,12 @@
     "pages/chart/chart",
     "pages/profile/profile",
     "pages/add/add",
-    "pages/detail/detail"
+    "pages/detail/detail",
+    "pages/babies/babies",
+    "pages/baby-form/baby-form",
+    "pages/vaccine/vaccine",
+    "pages/feed/feed",
+    "pages/backup/backup"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ff9a9e",

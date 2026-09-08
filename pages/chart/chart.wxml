@@ -11,6 +11,13 @@
   </view>
 
   <view wx:if="{{latest}}" class="latest">{{latest}}</view>
+  <view wx:if="{{whoLatest}}" class="who-line">┄ {{whoLatest}}</view>
+
+  <view class="legend">
+    <view class="legend-item"><view class="legend-dot solid"></view>宝宝数据</view>
+    <view class="legend-item"><view class="legend-dot band"></view>WHO P3–P97</view>
+    <view class="legend-item"><view class="legend-dot dash"></view>WHO 中位</view>
+  </view>
 
   <view class="hint text-muted">横坐标：出生后月龄　纵坐标：{{mode === 'height' ? '身高(cm)' : '体重(kg)'}}</view>
 </view>

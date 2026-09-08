@@ -45,6 +45,11 @@ Page({
   },
 
   onSave() {
+    const babyId = store.getCurrentId()
+    if (!babyId) {
+      wx.showToast({ title: '请先添加宝宝', icon: 'none' })
+      return
+    }
     const { activeType, date, value, note } = this.data
     const isMeasure = activeType === 'height' || activeType === 'weight'
 
@@ -70,7 +75,7 @@ Page({
       photos: this.data.photos,
       createdAt: Date.now()
     }
-    store.addRecord(record)
+    store.addRecord(babyId, record)
     wx.showToast({ title: '已记录', icon: 'success' })
     setTimeout(() => wx.navigateBack(), 500)
   },

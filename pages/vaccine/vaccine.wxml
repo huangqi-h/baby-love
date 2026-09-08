@@ -1,0 +1,23 @@
+<view class="container">
+
+  <view wx:if="{{!babyName}}" class="empty-box">
+    <view class="empty-emoji">💉</view>
+    <view class="empty-text">请先在首页添加宝宝</view>
+  </view>
+
+  <block wx:else>
+    <view class="section-title">{{babyName}} 的疫苗接种计划</view>
+    <view class="sub-bar">
+      <text class="sub-tip">临近/逾期疫苗可开启微信提醒</text>
+      <button class="sub-btn" size="mini" bindtap="onSubscribe">{{subscribed ? '已开启提醒' : '开启提醒'}}</button>
+    </view>
+    <view class="vac-item {{item.isDone ? 'done' : ''}} {{item.status}}" wx:for="{{list}}" wx:key="id" bindtap="toggle" data-id="{{item.id}}">
+      <view class="vac-main">
+        <view class="vac-name">{{item.name}}</view>
+        <view class="vac-sub">{{item.dueText}} · {{item.diffText}}</view>
+      </view>
+      <text wx:if="{{item.isDone}}" class="vac-check">✓</text>
+      <view wx:else class="vac-status {{item.status}}">{{item.status === 'overdue' ? '逾期' : (item.status === 'soon' ? '临近' : '待接种')}}</view>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,43 @@
+.backup-card {
+  margin-bottom: 24rpx;
+}
+
+.bk-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  margin-bottom: 8rpx;
+}
+
+.bk-desc {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 20rpx;
+  line-height: 1.6;
+}
+
+.bk-btn {
+  margin-bottom: 16rpx;
+  font-size: 28rpx;
+}
+
+.backup-outline {
+  background: #fff;
+  color: #ff6b81;
+  border: 2rpx solid #ffd0d6;
+}
+
+.backup-outline::after {
+  border: none;
+}
+
+.bk-status {
+  font-size: 24rpx;
+  color: #4dabf7;
+  margin-top: 8rpx;
+}
+
+.cloud-off {
+  font-size: 24rpx;
+  color: #bbb;
+  margin-top: 8rpx;
+}

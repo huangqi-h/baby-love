@@ -1,0 +1,35 @@
+<view class="container">
+
+  <view wx:if="{{!feeds.length && !lastText}}" class="empty-box">
+    <view class="empty-emoji">🍼</view>
+    <view class="empty-text">记录每一次喂养</view>
+  </view>
+
+  <view class="card">
+    <view class="type-row">
+      <view class="type-chip {{activeType === item.key ? 'active' : ''}}" wx:for="{{types}}" wx:key="key" data-type="{{item.key}}" bindtap="onTypeTap">{{item.label}}</view>
+    </view>
+    <view wx:if="{{activeType === 'breast'}}" class="form-row">
+      <text class="label">时长</text>
+      <view class="value-box"><input class="value-input" type="digit" placeholder="0" value="{{duration}}" bindinput="onDurationInput" /><text class="value-unit">分钟</text></view>
+    </view>
+    <view wx:else class="form-row">
+      <text class="label">奶量</text>
+      <view class="value-box"><input class="value-input" type="digit" placeholder="0" value="{{amount}}" bindinput="onAmountInput" /><text class="value-unit">ml</text></view>
+    </view>
+    <button class="btn-primary save-btn" bindtap="onSave">记录本次喂养</button>
+  </view>
+
+  <view wx:if="{{lastText}}" class="feed-info">
+    <text>上次：{{lastText}}</text>
+    <text>建议下次：{{nextText}}</text>
+  </view>
+
+  <view wx:if="{{feeds.length}}" class="feed-list">
+    <view class="feed-item card" wx:for="{{feeds}}" wx:key="id" bindtap="onDelete" data-id="{{item.id}}">
+      <text class="feed-time">{{item.timeText}}</text>
+      <text class="feed-desc">{{item.descText}}</text>
+      <text class="feed-del">删除</text>
+    </view>
+  </view>
+</view>

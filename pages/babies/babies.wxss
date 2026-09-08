@@ -1,0 +1,74 @@
+.section-title {
+  margin: 8rpx 8rpx 20rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #555;
+}
+
+.baby-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding: 24rpx;
+}
+
+.br-avatar {
+  width: 90rpx;
+  height: 90rpx;
+  border-radius: 50%;
+  background: #fff0f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+}
+
+.br-info {
+  flex: 1;
+  margin-left: 24rpx;
+  overflow: hidden;
+}
+
+.br-name {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.br-sub {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #999;
+}
+
+.br-actions {
+  display: flex;
+  align-items: center;
+}
+
+.br-current {
+  font-size: 26rpx;
+  color: #ff6b81;
+  font-weight: 600;
+  margin-right: 16rpx;
+}
+
+.br-switch {
+  font-size: 26rpx;
+  color: #4dabf7;
+  margin-right: 16rpx;
+}
+
+.br-edit {
+  font-size: 26rpx;
+  color: #888;
+  margin-right: 16rpx;
+}
+
+.br-del {
+  font-size: 26rpx;
+  color: #ccc;
+}
+
+.add-btn {
+  margin-top: 32rpx;
+}

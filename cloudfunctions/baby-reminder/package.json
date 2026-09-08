@@ -1,0 +1,9 @@
+{
+  "name": "baby-reminder",
+  "version": "1.0.0",
+  "description": "疫苗到期订阅消息定时推送",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

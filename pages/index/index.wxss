@@ -139,3 +139,58 @@
   box-shadow: 0 12rpx 30rpx rgba(255, 107, 129, 0.45);
   z-index: 99;
 }
+
+.switcher-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 200;
+}
+
+.switcher {
+  position: absolute;
+  top: 200rpx;
+  left: 40rpx;
+  right: 40rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 16rpx;
+  box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.2);
+}
+
+.switcher-item {
+  display: flex;
+  align-items: center;
+  padding: 22rpx 20rpx;
+  border-radius: 16rpx;
+}
+
+.switcher-item.active {
+  background: #fff0f2;
+}
+
+.sw-avatar {
+  font-size: 44rpx;
+  margin-right: 20rpx;
+}
+
+.sw-name {
+  flex: 1;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.sw-check {
+  color: #ff6b81;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.switcher-manage {
+  text-align: center;
+  padding: 22rpx;
+  margin-top: 8rpx;
+  color: #ff6b81;
+  font-size: 28rpx;
+  border-top: 1rpx solid #f3f3f3;
+}

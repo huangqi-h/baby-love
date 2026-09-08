@@ -1,7 +1,7 @@
 <view class="container">
 
   <!-- 宝宝信息卡片 -->
-  <view class="baby-card" bindtap="goProfile">
+  <view class="baby-card" bindtap="toggleSwitcher">
     <view wx:if="{{baby}}" class="baby-info">
       <view class="baby-avatar">{{baby.avatar || '👶'}}</view>
       <view class="baby-text">
@@ -12,14 +12,31 @@
           <text>{{ageText}}</text>
         </view>
       </view>
-      <view class="baby-edit">编辑 ›</view>
+      <view class="baby-edit">切换 ▾</view>
     </view>
     <view wx:else class="baby-empty">
       <view class="baby-avatar">👶</view>
       <view class="baby-text">
-        <view class="baby-name">还没有宝宝档案</view>
-        <view class="baby-sub">点击设置宝宝信息 ›</view>
+        <view class="baby-name">还没有宝宝</view>
+        <view class="baby-sub">点击添加宝宝 ›</view>
       </view>
+    </view>
+  </view>
+
+  <!-- 宝宝切换浮层 -->
+  <view wx:if="{{showSwitcher}}" class="switcher-mask" bindtap="toggleSwitcher">
+    <view class="switcher" catchtap="noop">
+      <view
+        class="switcher-item {{item.id === baby.id ? 'active' : ''}}"
+        wx:for="{{babies}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="switchBaby">
+        <text class="sw-avatar">{{item.avatar || '👶'}}</text>
+        <text class="sw-name">{{item.name}}</text>
+        <text wx:if="{{item.id === baby.id}}" class="sw-check">✓</text>
+      </view>
+      <view class="switcher-manage" bindtap="goBabies">＋ 管理宝宝</view>
     </view>
   </view>
 

@@ -1,11 +1,13 @@
 const store = require('../../utils/store.js')
 const util = require('../../utils/util.js')
+const who = require('../../utils/who.js')
 
 Page({
   data: {
     mode: 'height',
     empty: false,
-    latest: ''
+    latest: '',
+    whoLatest: ''
   },
 
   onReady() {
@@ -41,15 +43,26 @@ Page({
 
   render(ctx, w, h) {
     ctx.clearRect(0, 0, w, h)
-    const baby = store.getProfile()
+    const baby = store.getCurrentBaby()
     const mode = this.data.mode
     const meta = util.typeMeta(mode)
-    const records = store.getRecords()
+    const records = store.getCurrentId()
+      ? store.getRecords(store.getCurrentId())
+      : []
+    const userRecords = records
       .filter(r => r.type === mode && r.value)
       .sort((a, b) => new Date(a.date) - new Date(b.date))
 
-    if (!baby || records.length === 0) {
-      this.setData({ empty: true, latest: '' })
+    if (!baby) {
+      this.setData({ empty: true, latest: '', whoLatest: '' })
+      ctx.fillStyle = '#bbb'
+      ctx.font = '14px sans-serif'
+      ctx.textAlign = 'center'
+      ctx.fillText('请先在首页添加宝宝', w / 2, h / 2)
+      return
+    }
+    if (userRecords.length === 0) {
+      this.setData({ empty: true, latest: '', whoLatest: '' })
       ctx.fillStyle = '#bbb'
       ctx.font = '14px sans-serif'
       ctx.textAlign = 'center'
@@ -58,15 +71,20 @@ Page({
     }
     this.setData({ empty: false })
 
-    const points = records.map(r => ({
+    const userPoints = userRecords.map(r => ({
       month: util.monthsFromBirth(baby.birthday, r.date),
       val: Number(r.value)
     }))
 
-    let maxX = Math.max(1, ...points.map(p => p.month))
-    let maxY = Math.max(...points.map(p => p.val))
-    let minY = Math.min(...points.map(p => p.val))
-    maxY = maxY * 1.15
+    const band = who.whoBand(baby.gender, mode)
+    const maxX = Math.max(1, ...userPoints.map(p => p.month))
+    const bpts = band.filter(p => p.month <= maxX)
+
+    // 坐标范围（纳入用户数据与 WHO 参考区间）
+    const yVals = userPoints.map(p => p.val)
+      .concat(bpts.map(p => p.p3), bpts.map(p => p.p97))
+    let maxY = Math.max(...yVals) * 1.1
+    let minY = Math.min(...yVals)
     if (minY > 0) minY = Math.max(0, minY * 0.9)
     else minY = 0
 
@@ -98,23 +116,61 @@ Page({
     const xSteps = Math.min(5, Math.ceil(maxX))
     for (let i = 0; i <= xSteps; i++) {
       const m = (maxX / xSteps) * i
-      const x = sx(m)
-      ctx.fillText(m.toFixed(0) + '月', x, h - padB + 18)
+      ctx.fillText(m.toFixed(0) + '月', sx(m), h - padB + 18)
     }
 
-    // 折线
+    if (bpts.length >= 2) {
+      // P3–P97 参考区间（阴影）
+      ctx.fillStyle = 'rgba(120, 120, 120, 0.10)'
+      ctx.beginPath()
+      bpts.forEach((p, i) => {
+        const x = sx(p.month), y = sy(p.p97)
+        i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)
+      })
+      for (let i = bpts.length - 1; i >= 0; i--) {
+        const p = bpts[i]
+        ctx.lineTo(sx(p.month), sy(p.p3))
+      }
+      ctx.closePath()
+      ctx.fill()
+
+      // P15 / P85 浅线
+      ctx.strokeStyle = 'rgba(150, 150, 150, 0.45)'
+      ctx.lineWidth = 1
+      ;['p15', 'p85'].forEach(key => {
+        ctx.beginPath()
+        bpts.forEach((p, i) => {
+          const x = sx(p.month), y = sy(p[key])
+          i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)
+        })
+        ctx.stroke()
+      })
+
+      // P50 中位线（虚线）
+      ctx.setLineDash([5, 4])
+      ctx.strokeStyle = '#999'
+      ctx.lineWidth = 1.5
+      ctx.beginPath()
+      bpts.forEach((p, i) => {
+        const x = sx(p.month), y = sy(p.p50)
+        i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)
+      })
+      ctx.stroke()
+      ctx.setLineDash([])
+    }
+
+    // 用户数据折线
     ctx.strokeStyle = meta.color
     ctx.lineWidth = 2.5
     ctx.beginPath()
-    points.forEach((p, i) => {
+    userPoints.forEach((p, i) => {
       const x = sx(p.month), y = sy(p.val)
-      if (i === 0) ctx.moveTo(x, y)
-      else ctx.lineTo(x, y)
+      i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)
     })
     ctx.stroke()
 
     // 数据点
-    points.forEach(p => {
+    userPoints.forEach(p => {
       const x = sx(p.month), y = sy(p.val)
       ctx.fillStyle = '#fff'
       ctx.beginPath()
@@ -125,7 +181,11 @@ Page({
       ctx.stroke()
     })
 
-    const last = points[points.length - 1]
-    this.setData({ latest: `最新（${last.month.toFixed(1)}个月）：${last.val}${meta.unit}` })
+    const last = userPoints[userPoints.length - 1]
+    const whoLast = bpts.reduce((a, p) => (p.month <= last.month ? p : a), bpts[0])
+    this.setData({
+      latest: `宝宝（${last.month.toFixed(1)}个月）：${last.val}${meta.unit}`,
+      whoLatest: `WHO中位（${whoLast.month}个月）：${whoLast.p50}${meta.unit}`
+    })
   }
 })

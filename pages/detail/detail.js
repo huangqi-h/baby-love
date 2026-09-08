@@ -7,13 +7,14 @@ Page({
   },
 
   onLoad(options) {
+    this.babyId = store.getCurrentId()
     if (options.id) {
       this.loadRecord(options.id)
     }
   },
 
   loadRecord(id) {
-    const r = store.getRecordById(id)
+    const r = store.getRecordById(this.babyId, id)
     if (!r) {
       wx.showToast({ title: '记录不存在', icon: 'none' })
       return
@@ -38,7 +39,7 @@ Page({
       confirmColor: '#ff6b81',
       success: (res) => {
         if (res.confirm) {
-          store.deleteRecord(this.data.record.id)
+          store.deleteRecord(this.babyId, this.data.record.id)
           wx.showToast({ title: '已删除', icon: 'success' })
           setTimeout(() => wx.navigateBack(), 500)
         }

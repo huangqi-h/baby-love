@@ -6,7 +6,9 @@ Page({
     baby: null,
     ageText: '',
     records: [],
-    empty: true
+    empty: true,
+    babies: [],
+    showSwitcher: false
   },
 
   onShow() {
@@ -19,8 +21,9 @@ Page({
   },
 
   refresh() {
-    const baby = store.getProfile()
-    const records = store.getRecords()
+    const baby = store.getCurrentBaby()
+    const babyId = store.getCurrentId()
+    const records = babyId ? store.getRecords(babyId) : []
     const list = records.slice(0, 10).map(r => {
       const meta = util.typeMeta(r.type)
       let summary = ''
@@ -42,16 +45,40 @@ Page({
       baby,
       ageText: baby ? util.calcAge(baby.birthday) : '',
       records: list,
-      empty: records.length === 0
+      empty: records.length === 0,
+      babies: store.getBabies()
     })
   },
 
+  noop() {},
+
+  toggleSwitcher() {
+    if (!this.data.baby) {
+      wx.navigateTo({ url: '/pages/babies/babies' })
+      return
+    }
+    this.setData({ showSwitcher: !this.data.showSwitcher })
+  },
+
+  switchBaby(e) {
+    const id = e.currentTarget.dataset.id
+    store.setCurrentId(id)
+    getApp().globalData.currentBabyId = id
+    getApp().globalData.baby = store.getBabyById(id)
+    this.setData({ showSwitcher: false })
+    this.refresh()
+  },
+
   goAdd() {
+    if (!store.getCurrentId()) {
+      wx.showToast({ title: '请先添加宝宝', icon: 'none' })
+      return
+    }
     wx.navigateTo({ url: '/pages/add/add' })
   },
 
-  goProfile() {
-    wx.switchTab({ url: '/pages/profile/profile' })
+  goBabies() {
+    wx.navigateTo({ url: '/pages/babies/babies' })
   },
 
   goDetail(e) {
