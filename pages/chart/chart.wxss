@@ -1,0 +1,52 @@
+.seg {
+  display: flex;
+  background: #fff;
+  border-radius: 999rpx;
+  padding: 8rpx;
+  margin-bottom: 28rpx;
+}
+
+.seg-item {
+  flex: 1;
+  text-align: center;
+  padding: 18rpx 0;
+  font-size: 28rpx;
+  color: #888;
+  border-radius: 999rpx;
+}
+
+.seg-item.active {
+  background: linear-gradient(135deg, #ff9a9e, #ff6b81);
+  color: #fff;
+  font-weight: 600;
+}
+
+.chart-card {
+  padding: 20rpx;
+  position: relative;
+}
+
+.chart-canvas {
+  width: 100%;
+  height: 480rpx;
+}
+
+.chart-empty {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.latest {
+  margin: 24rpx 8rpx 0;
+  font-size: 28rpx;
+  color: #ff6b81;
+  font-weight: 600;
+}
+
+.hint {
+  margin: 16rpx 8rpx 0;
+  font-size: 22rpx;
+}

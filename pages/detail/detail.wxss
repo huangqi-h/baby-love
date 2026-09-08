@@ -1,0 +1,73 @@
+.detail-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 56rpx 40rpx;
+}
+
+.detail-icon {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64rpx;
+}
+
+.detail-type {
+  margin-top: 24rpx;
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.detail-date {
+  margin-top: 8rpx;
+}
+
+.detail-measure {
+  margin-top: 36rpx;
+  font-size: 72rpx;
+  font-weight: 700;
+  color: #ff6b81;
+}
+
+.detail-note {
+  margin-top: 36rpx;
+  font-size: 32rpx;
+  line-height: 1.7;
+  color: #555;
+  white-space: pre-wrap;
+  text-align: left;
+  width: 100%;
+}
+
+.delete-btn {
+  margin-top: 56rpx;
+  background: #fff;
+  color: #ff6b81;
+  border-radius: 999rpx;
+  font-size: 30rpx;
+  border: 2rpx solid #ffd0d6;
+}
+
+.delete-btn::after {
+  border: none;
+}
+
+.detail-photos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 32rpx;
+  width: 100%;
+}
+
+.detail-photo {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 16rpx;
+  margin: 8rpx;
+}

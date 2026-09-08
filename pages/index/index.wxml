@@ -1,0 +1,50 @@
+<view class="container">
+
+  <!-- 宝宝信息卡片 -->
+  <view class="baby-card" bindtap="goProfile">
+    <view wx:if="{{baby}}" class="baby-info">
+      <view class="baby-avatar">{{baby.avatar || '👶'}}</view>
+      <view class="baby-text">
+        <view class="baby-name">{{baby.name}}</view>
+        <view class="baby-sub">
+          <text>{{baby.gender === 'boy' ? '小王子' : (baby.gender === 'girl' ? '小公主' : '宝宝')}}</text>
+          <text class="dot">·</text>
+          <text>{{ageText}}</text>
+        </view>
+      </view>
+      <view class="baby-edit">编辑 ›</view>
+    </view>
+    <view wx:else class="baby-empty">
+      <view class="baby-avatar">👶</view>
+      <view class="baby-text">
+        <view class="baby-name">还没有宝宝档案</view>
+        <view class="baby-sub">点击设置宝宝信息 ›</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 记录时间线 -->
+  <view class="section-title">最近记录</view>
+
+  <view wx:if="{{empty}}" class="empty-box">
+    <view class="empty-emoji">🍼</view>
+    <view class="empty-text">还没有记录，点击右下角按钮添加第一条吧～</view>
+  </view>
+
+  <view wx:else class="timeline">
+    <view class="timeline-item card" wx:for="{{records}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}">
+      <view class="tl-icon" style="background:{{item.typeColor}}1a;color:{{item.typeColor}}">{{item.typeIcon}}</view>
+      <view class="tl-body">
+        <view class="tl-top">
+          <text class="tl-type">{{item.typeLabel}}</text>
+          <text class="tl-date text-muted">{{item.dateText}}</text>
+        </view>
+        <view class="tl-summary"><text wx:if="{{item.hasPhoto}}" class="tl-photo">📷 </text>{{item.summary}}</view>
+      </view>
+      <view class="tl-arrow">›</view>
+    </view>
+  </view>
+
+  <!-- 悬浮添加按钮 -->
+  <view class="fab" bindtap="goAdd">＋</view>
+</view>

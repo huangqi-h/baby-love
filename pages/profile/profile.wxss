@@ -1,0 +1,69 @@
+.form-row {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 0;
+  border-bottom: 1rpx solid #f3f3f3;
+}
+
+.label {
+  width: 160rpx;
+  font-size: 30rpx;
+  color: #444;
+  flex-shrink: 0;
+}
+
+.input {
+  flex: 1;
+  font-size: 30rpx;
+  text-align: right;
+}
+
+.radio-group {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.radio-item {
+  font-size: 28rpx;
+  margin-left: 30rpx;
+}
+
+.picker-value {
+  flex: 1;
+  text-align: right;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.form-block {
+  padding: 28rpx 0 8rpx;
+}
+
+.avatar-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20rpx;
+}
+
+.avatar-opt {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 20rpx;
+  background: #f7f7f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+  margin: 0 20rpx 20rpx 0;
+  border: 4rpx solid transparent;
+}
+
+.avatar-opt.active {
+  border-color: #ff6b81;
+  background: #fff0f2;
+}
+
+.save-btn {
+  margin-top: 48rpx;
+}

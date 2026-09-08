@@ -1,0 +1,54 @@
+<view class="container">
+
+  <!-- 类型选择 -->
+  <view class="type-row">
+    <view
+      class="type-chip {{activeType === item.key ? 'active' : ''}}"
+      wx:for="{{types}}"
+      wx:key="key"
+      data-type="{{item.key}}"
+      bindtap="onTypeTap"
+      style="{{activeType === item.key ? 'background:' + item.color + ';border-color:' + item.color : ''}}">
+      <text class="chip-icon">{{item.icon}}</text>
+      <text>{{item.label}}</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="form-row">
+      <text class="label">日期</text>
+      <picker mode="date" value="{{date}}" end="{{today}}" bindchange="onDateChange">
+        <view class="picker-value">{{date}}</view>
+      </picker>
+    </view>
+
+    <!-- 身高/体重：数值输入 -->
+    <view wx:if="{{activeType === 'height' || activeType === 'weight'}}" class="form-row">
+      <text class="label">数值</text>
+      <view class="value-box">
+        <input class="value-input" type="digit" placeholder="0" value="{{value}}" bindinput="onValueInput" />
+        <text class="value-unit">{{unit}}</text>
+      </view>
+    </view>
+
+    <!-- 日记/里程碑：文本输入 -->
+    <view wx:else class="form-row column">
+      <text class="label">{{activeType === 'milestone' ? '发生了什么' : '今天想说'}}</text>
+      <textarea class="note-input" placeholder="记录美好瞬间…" value="{{note}}" bindinput="onNoteInput" maxlength="500" />
+    </view>
+
+    <!-- 照片（可选） -->
+    <view class="form-row column photo-row">
+      <text class="label">照片（可选）</text>
+      <view class="photo-grid">
+        <view class="photo-item" wx:for="{{photos}}" wx:key="*this" data-index="{{index}}" bindtap="onRemovePhoto">
+          <image class="photo-img" src="{{item}}" mode="aspectFill" />
+          <view class="photo-del">×</view>
+        </view>
+        <view wx:if="{{photos.length < 9}}" class="photo-add" bindtap="onChoosePhoto">＋</view>
+      </view>
+    </view>
+  </view>
+
+  <button class="btn-primary save-btn" bindtap="onSave">保存记录</button>
+</view>

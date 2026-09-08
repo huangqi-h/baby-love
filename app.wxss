@@ -1,0 +1,33 @@
+page {
+  background: #fff5f5;
+  font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif;
+  color: #333;
+}
+
+.container {
+  padding: 24rpx;
+  box-sizing: border-box;
+}
+
+.card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  box-shadow: 0 8rpx 24rpx rgba(255, 154, 158, 0.12);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ff9a9e, #ff6b81);
+  color: #fff;
+  border-radius: 999rpx;
+  font-size: 30rpx;
+}
+
+.btn-primary::after {
+  border: none;
+}
+
+.text-muted {
+  color: #999;
+  font-size: 24rpx;
+}

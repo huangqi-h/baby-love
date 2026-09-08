@@ -1,0 +1,16 @@
+<view class="container">
+
+  <view class="seg">
+    <view class="seg-item {{mode === 'height' ? 'active' : ''}}" data-mode="height" bindtap="onMode">身高曲线</view>
+    <view class="seg-item {{mode === 'weight' ? 'active' : ''}}" data-mode="weight" bindtap="onMode">体重曲线</view>
+  </view>
+
+  <view class="card chart-card">
+    <canvas type="2d" id="chartCanvas" class="chart-canvas"></canvas>
+    <view wx:if="{{empty}}" class="chart-empty"></view>
+  </view>
+
+  <view wx:if="{{latest}}" class="latest">{{latest}}</view>
+
+  <view class="hint text-muted">横坐标：出生后月龄　纵坐标：{{mode === 'height' ? '身高(cm)' : '体重(kg)'}}</view>
+</view>

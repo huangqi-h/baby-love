@@ -1,0 +1,141 @@
+.baby-card {
+  background: linear-gradient(135deg, #ffd3d8, #ffb3c0);
+  border-radius: 28rpx;
+  padding: 36rpx;
+  color: #fff;
+  box-shadow: 0 12rpx 30rpx rgba(255, 107, 129, 0.25);
+}
+
+.baby-info, .baby-empty {
+  display: flex;
+  align-items: center;
+}
+
+.baby-avatar {
+  width: 110rpx;
+  height: 110rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60rpx;
+  flex-shrink: 0;
+}
+
+.baby-text {
+  flex: 1;
+  margin-left: 24rpx;
+}
+
+.baby-name {
+  font-size: 40rpx;
+  font-weight: 600;
+}
+
+.baby-sub {
+  margin-top: 8rpx;
+  font-size: 26rpx;
+  opacity: 0.9;
+}
+
+.baby-sub .dot {
+  margin: 0 10rpx;
+}
+
+.baby-edit {
+  font-size: 26rpx;
+  opacity: 0.9;
+}
+
+.section-title {
+  margin: 40rpx 8rpx 20rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #555;
+}
+
+.empty-box {
+  text-align: center;
+  padding: 80rpx 40rpx;
+}
+
+.empty-emoji {
+  font-size: 80rpx;
+}
+
+.empty-text {
+  margin-top: 20rpx;
+  color: #aaa;
+  font-size: 26rpx;
+}
+
+.timeline-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding: 24rpx;
+}
+
+.tl-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  flex-shrink: 0;
+}
+
+.tl-body {
+  flex: 1;
+  margin-left: 24rpx;
+  overflow: hidden;
+}
+
+.tl-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tl-type {
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.tl-date {
+  font-size: 24rpx;
+}
+
+.tl-summary {
+  margin-top: 8rpx;
+  font-size: 28rpx;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tl-arrow {
+  color: #ccc;
+  font-size: 44rpx;
+  margin-left: 12rpx;
+}
+
+.fab {
+  position: fixed;
+  right: 48rpx;
+  bottom: 60rpx;
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff9a9e, #ff6b81);
+  color: #fff;
+  font-size: 60rpx;
+  line-height: 104rpx;
+  text-align: center;
+  box-shadow: 0 12rpx 30rpx rgba(255, 107, 129, 0.45);
+  z-index: 99;
+}

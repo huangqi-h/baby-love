@@ -1,0 +1,21 @@
+<view class="container" wx:if="{{record}}">
+
+  <view class="card detail-card">
+    <view class="detail-icon" style="background:{{record.typeColor}}1a;color:{{record.typeColor}}">
+      {{record.typeIcon}}
+    </view>
+    <view class="detail-type">{{record.typeLabel}}</view>
+    <view class="detail-date text-muted">{{record.dateText}}</view>
+
+    <view wx:if="{{record.measureText}}" class="detail-measure">
+      {{record.measureText}}
+    </view>
+    <view wx:else class="detail-note">{{record.note}}</view>
+
+    <view wx:if="{{record.photos.length}}" class="detail-photos">
+      <image wx:for="{{record.photos}}" wx:key="*this" class="detail-photo" src="{{item}}" mode="aspectFill" />
+    </view>
+  </view>
+
+  <button class="delete-btn" bindtap="onDelete">删除这条记录</button>
+</view>
