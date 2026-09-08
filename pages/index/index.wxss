@@ -99,6 +99,26 @@
   text-overflow: ellipsis;
 }
 
+.vac-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
+.vac-done {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: #e8f8ef;
+  color: #2bb673;
+  font-size: 30rpx;
+  line-height: 48rpx;
+  text-align: center;
+  margin-left: 16rpx;
+  border: 1rpx solid #b8e6cf;
+}
+
 .vac-tag {
   font-size: 22rpx;
   padding: 4rpx 16rpx;

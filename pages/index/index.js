@@ -1,5 +1,6 @@
 const store = require('../../utils/store.js')
 const util = require('../../utils/util.js')
+const cloud = require('../../utils/cloud.js')
 
 // 简化版国家免疫规划疫苗接种时间表（age：出生后月数）
 const VACCINE_SCHEDULE = [
@@ -125,6 +126,18 @@ Page({
 
   goVaccine() {
     wx.navigateTo({ url: '/pages/vaccine/vaccine' })
+  },
+
+  markVaccine(e) {
+    const id = e.currentTarget.dataset.id
+    const baby = store.getCurrentBaby()
+    if (!baby || store.getVaccines(baby.id).indexOf(id) >= 0) return
+    store.toggleVaccine(baby.id, id)
+    this.setData({ upcomingVaccines: this.computeVaccines() })
+    if (cloud.CLOUD_ENABLED) {
+      cloud.upload(store.exportAll()).catch(() => {})
+    }
+    wx.showToast({ title: '已标记完成', icon: 'success' })
   },
 
   goDetail(e) {

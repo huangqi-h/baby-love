@@ -40,4 +40,13 @@ function download() {
     .then(res => (res.data && res.data[0] && res.data[0].payload) || null)
 }
 
-module.exports = { CLOUD_ENABLED, upload, download }
+// 上报订阅消息授权关系到云函数（定时任务据此下发）
+function subscribe(templateId) {
+  if (!ensureCloud()) return Promise.reject(new Error('cloud disabled'))
+  return wx.cloud.callFunction({
+    name: 'baby-subscribe',
+    data: { TEMPLATE_ID: templateId, action: 'subscribe' }
+  })
+}
+
+module.exports = { CLOUD_ENABLED, upload, download, subscribe }

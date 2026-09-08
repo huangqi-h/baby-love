@@ -1,5 +1,6 @@
 const store = require('../../utils/store.js')
 const util = require('../../utils/util.js')
+const cloud = require('../../utils/cloud.js')
 
 // 简化版国家免疫规划疫苗接种时间表（age：出生后月数）
 const SCHEDULE = [
@@ -59,9 +60,12 @@ Page({
     const baby = store.getCurrentBaby()
     store.toggleVaccine(baby.id, id)
     this.refresh()
+    if (cloud.CLOUD_ENABLED) {
+      cloud.upload(store.exportAll()).catch(() => {})
+    }
   },
   onSubscribe() {
-    // 需先在微信公众平台申请「疫苗/健康提醒」类目订阅消息模板，将模板 ID 填到下方
+    // 需先在微信公众平台申请「疫苗/健康提醒」类目订阅消息模板
     const TEMPLATE_ID = 'Y-olTYsFEc4c7vr6n9dSSDJsOtu-vdsmdVW1trXDEAg'
     if (!TEMPLATE_ID) {
       wx.showToast({ title: '未配置模板ID', icon: 'none' })
@@ -70,8 +74,11 @@ Page({
     wx.requestSubscribeMessage({
       tmplIds: [TEMPLATE_ID],
       success: () => {
-        wx.showToast({ title: '已开启到期提醒', icon: 'success' })
         this.setData({ subscribed: true })
+        // 上报订阅关系到云端，定时任务据此对当前用户下发
+        cloud.subscribe(TEMPLATE_ID)
+          .then(() => wx.showToast({ title: '已开启到期提醒', icon: 'success' }))
+          .catch(() => wx.showToast({ title: '已授权，云上报失败', icon: 'none' }))
       },
       fail: () => wx.showToast({ title: '授权失败', icon: 'none' })
     })

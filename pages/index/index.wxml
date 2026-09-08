@@ -48,7 +48,10 @@
     </view>
     <view class="vac-item" wx:for="{{upcomingVaccines}}" wx:key="id">
       <text class="vac-name">{{item.name}}</text>
-      <text class="vac-tag {{item.status}}">{{item.status === 'overdue' ? '逾期' : '临近'}} · {{item.diffText}}</text>
+      <view class="vac-right">
+        <text class="vac-tag {{item.status}}">{{item.status === 'overdue' ? '逾期' : '临近'}} · {{item.diffText}}</text>
+        <view class="vac-done" catchtap="markVaccine" data-id="{{item.id}}">✓</view>
+      </view>
     </view>
   </view>
 
