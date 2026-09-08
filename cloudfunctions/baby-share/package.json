@@ -1,0 +1,9 @@
+{
+  "name": "baby-share",
+  "version": "1.0.0",
+  "description": "家庭共享：生成/加入/同步",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}

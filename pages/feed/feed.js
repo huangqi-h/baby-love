@@ -1,5 +1,6 @@
 const store = require('../../utils/store.js')
 const util = require('../../utils/util.js')
+const cloud = require('../../utils/cloud.js')
 
 const TYPES = [
   { key: 'breast', label: '母乳' },
@@ -18,7 +19,7 @@ Page({
     nextText: ''
   },
   onShow() {
-    this.refresh()
+    cloud.autoSync().then(() => this.refresh())
   },
   onTypeTap(e) {
     this.setData({ activeType: e.currentTarget.dataset.type })
@@ -54,12 +55,18 @@ Page({
       duration: activeType === 'breast' ? (Number(duration) || 0) : 0
     }
     store.addFeed(babyId, feed)
+    if (store.getShareId() && cloud.CLOUD_ENABLED) {
+      cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
+    }
     this.setData({ amount: '', duration: '' })
     this.refresh()
   },
   onDelete(e) {
     const id = e.currentTarget.dataset.id
     store.deleteFeed(store.getCurrentId(), id)
+    if (store.getShareId() && cloud.CLOUD_ENABLED) {
+      cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
+    }
     this.refresh()
   },
   refresh() {

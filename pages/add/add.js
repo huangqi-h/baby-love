@@ -1,5 +1,6 @@
 const store = require('../../utils/store.js')
 const util = require('../../utils/util.js')
+const cloud = require('../../utils/cloud.js')
 
 const TYPES = ['height', 'weight', 'diary', 'milestone']
 
@@ -76,6 +77,9 @@ Page({
       createdAt: Date.now()
     }
     store.addRecord(babyId, record)
+    if (store.getShareId() && cloud.CLOUD_ENABLED) {
+      cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
+    }
     wx.showToast({ title: '已记录', icon: 'success' })
     setTimeout(() => wx.navigateBack(), 500)
   },

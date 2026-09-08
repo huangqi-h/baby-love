@@ -27,7 +27,7 @@ Page({
     subscribed: false
   },
   onShow() {
-    this.refresh()
+    cloud.autoSync().then(() => this.refresh())
   },
   refresh() {
     const baby = store.getCurrentBaby()
@@ -60,7 +60,9 @@ Page({
     const baby = store.getCurrentBaby()
     store.toggleVaccine(baby.id, id)
     this.refresh()
-    if (cloud.CLOUD_ENABLED) {
+    if (store.getShareId() && cloud.CLOUD_ENABLED) {
+      cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
+    } else if (cloud.CLOUD_ENABLED) {
       cloud.upload(store.exportAll()).catch(() => {})
     }
   },

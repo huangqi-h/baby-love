@@ -1,5 +1,6 @@
 const store = require('../../utils/store.js')
 const util = require('../../utils/util.js')
+const cloud = require('../../utils/cloud.js')
 
 const AVATARS = ['👶', '🐱', '🐰', '🐻', '🐼', '🌸', '⭐', '🍑']
 const MAX_BIRTHDAY = util.formatDate(new Date())
@@ -49,6 +50,9 @@ Page({
       store.updateBaby(editId, data)
     } else {
       store.addBaby(data)
+    }
+    if (store.getShareId() && cloud.CLOUD_ENABLED) {
+      cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
     }
     wx.showToast({ title: '已保存', icon: 'success' })
     setTimeout(() => wx.navigateBack(), 500)

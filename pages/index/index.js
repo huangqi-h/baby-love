@@ -32,7 +32,7 @@ Page({
   },
 
   onShow() {
-    this.refresh()
+    cloud.autoSync().then(() => this.refresh())
   },
 
   onPullDownRefresh() {
@@ -142,7 +142,9 @@ Page({
     if (!baby || store.getVaccines(baby.id).indexOf(id) >= 0) return
     store.toggleVaccine(baby.id, id)
     this.setData({ upcomingVaccines: this.computeVaccines() })
-    if (cloud.CLOUD_ENABLED) {
+    if (store.getShareId() && cloud.CLOUD_ENABLED) {
+      cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
+    } else if (cloud.CLOUD_ENABLED) {
       cloud.upload(store.exportAll()).catch(() => {})
     }
     wx.showToast({ title: '已标记完成', icon: 'success' })

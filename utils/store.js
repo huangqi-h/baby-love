@@ -5,6 +5,7 @@ const CURRENT_KEY = 'currentBabyId'
 const RECORDS_KEY = 'records'
 const VACCINE_KEY = 'vaccines'
 const FEED_KEY = 'feeds'
+const SHARE_KEY = 'shareId'
 
 /* ---------- 宝宝 ---------- */
 function getBabies() { return wx.getStorageSync(BABIES_KEY) || [] }
@@ -134,11 +135,16 @@ function importAll(data) {
   return true
 }
 
+function getShareId() { return wx.getStorageSync(SHARE_KEY) || '' }
+function setShareId(id) { wx.setStorageSync(SHARE_KEY, id) }
+function clearShareId() { wx.removeStorageSync(SHARE_KEY) }
+
 module.exports = {
   getBabies, saveBabies, getCurrentId, setCurrentId, getBabyById, getCurrentBaby,
   addBaby, updateBaby, deleteBaby,
   getRecords, saveRecords, addRecord, deleteRecord, getRecordById,
   getVaccines, toggleVaccine,
   getFeeds, saveFeeds, addFeed, deleteFeed,
-  exportAll, importAll
+  exportAll, importAll,
+  getShareId, setShareId, clearShareId
 }

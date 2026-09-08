@@ -1,4 +1,5 @@
 const store = require('../../utils/store.js')
+const cloud = require('../../utils/cloud.js')
 
 Page({
   data: {
@@ -6,9 +7,11 @@ Page({
     currentId: ''
   },
   onShow() {
-    this.setData({
-      babies: store.getBabies(),
-      currentId: store.getCurrentId()
+    cloud.autoSync().then(() => {
+      this.setData({
+        babies: store.getBabies(),
+        currentId: store.getCurrentId()
+      })
     })
   },
   switchTo(e) {
@@ -43,6 +46,9 @@ Page({
         if (res.confirm) {
           store.deleteBaby(id)
           this.setData({ babies: store.getBabies(), currentId: store.getCurrentId() })
+          if (store.getShareId() && cloud.CLOUD_ENABLED) {
+            cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
+          }
         }
       }
     })

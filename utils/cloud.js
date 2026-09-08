@@ -49,4 +49,39 @@ function subscribe(templateId) {
   })
 }
 
-module.exports = { CLOUD_ENABLED, upload, download, subscribe }
+/* ---------- 家庭共享 ---------- */
+function createShare(payload) {
+  if (!ensureCloud()) return Promise.reject(new Error('cloud disabled'))
+  return wx.cloud.callFunction({ name: 'baby-share', data: { action: 'create', data: payload } })
+    .then(res => res.result)
+}
+
+function joinShare(shareId) {
+  if (!ensureCloud()) return Promise.reject(new Error('cloud disabled'))
+  return wx.cloud.callFunction({ name: 'baby-share', data: { action: 'join', shareId } })
+    .then(res => res.result)
+}
+
+function syncShare(shareId, payload) {
+  if (!ensureCloud()) return Promise.reject(new Error('cloud disabled'))
+  return wx.cloud.callFunction({ name: 'baby-share', data: { action: 'sync', shareId, data: payload } })
+    .then(res => res.result)
+}
+
+// 自动同步：有 shareId 时拉取云端最新数据并 import（建议在页面 onShow 调用）
+function autoSync() {
+  const store = require('./store.js')
+  const shareId = store.getShareId()
+  if (!shareId || !ensureCloud()) return Promise.resolve(false)
+  return syncShare(shareId)
+    .then(res => {
+      if (res && res.success && res.payload) {
+        store.importAll(res.payload)
+        return true
+      }
+      return false
+    })
+    .catch(() => false)
+}
+
+module.exports = { CLOUD_ENABLED, upload, download, subscribe, createShare, joinShare, syncShare, autoSync }
