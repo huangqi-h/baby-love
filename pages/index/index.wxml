@@ -33,7 +33,8 @@
         wx:key="id"
         data-id="{{item.id}}"
         bindtap="switchBaby">
-        <text class="sw-avatar">{{item.avatar || '👶'}}</text>
+        <image wx:if="{{item.isImgAvatar}}" class="sw-avatar-img" src="{{item.avatar}}" mode="aspectFill" />
+        <text wx:else class="sw-avatar">{{item.avatar || '👶'}}</text>
         <text class="sw-name">{{item.name}}</text>
         <text wx:if="{{item.id === baby.id}}" class="sw-check">✓</text>
       </view>

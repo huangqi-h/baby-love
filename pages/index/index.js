@@ -73,7 +73,9 @@ Page({
       ageText: baby ? util.calcAge(baby.birthday) : '',
       records: list,
       empty: records.length === 0,
-      babies: store.getBabies(),
+      babies: (store.getBabies() || []).map(b => Object.assign({}, b, {
+        isImgAvatar: b.avatar && (b.avatar.startsWith('wxfile://') || b.avatar.startsWith('http') || b.avatar.startsWith('cloud://') || b.avatar.startsWith('/'))
+      })),
       upcomingVaccines: this.computeVaccines()
     })
   },
