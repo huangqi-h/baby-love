@@ -4,7 +4,8 @@
 
   <view class="baby-list">
     <view class="baby-row card" wx:for="{{babies}}" wx:key="id">
-      <view class="br-avatar">{{item.avatar || '👶'}}</view>
+      <image wx:if="{{item.avatar && item.avatar[0] === '/'}}" class="br-avatar-img" src="{{item.avatar}}" mode="aspectFill" />
+      <view wx:else class="br-avatar">{{item.avatar || '👶'}}</view>
       <view class="br-info">
         <view class="br-name">{{item.name}}</view>
         <view class="br-sub">{{item.gender === 'boy' ? '小王子' : (item.gender === 'girl' ? '小公主' : '宝宝')}} · {{item.birthday}}</view>

@@ -64,6 +64,18 @@
   background: #fff0f2;
 }
 
+.avatar-img {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 16rpx;
+}
+
+.avatar-opt.camera {
+  border: 2rpx dashed #ccc;
+  color: #999;
+  font-size: 36rpx;
+}
+
 .save-btn {
   margin-top: 48rpx;
 }

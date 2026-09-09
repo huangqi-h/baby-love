@@ -11,10 +11,13 @@
   align-items: center;
 }
 
-.me-avatar {
+.me-avatar, .me-avatar-img {
   width: 110rpx;
   height: 110rpx;
   border-radius: 50%;
+}
+
+.me-avatar {
   background: rgba(255, 255, 255, 0.35);
   display: flex;
   align-items: center;

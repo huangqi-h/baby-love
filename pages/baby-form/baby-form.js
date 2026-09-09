@@ -35,6 +35,20 @@ Page({
   onGenderChange(e) { this.setData({ gender: e.detail.value }) },
   onBirthdayChange(e) { this.setData({ birthday: e.detail.value }) },
   onAvatarTap(e) { this.setData({ avatar: e.currentTarget.dataset.avatar }) },
+  onChooseAvatar() {
+    wx.chooseMedia({
+      count: 1,
+      mediaType: ['image'],
+      sizeType: ['compressed'],
+      sourceType: ['album', 'camera'],
+      success: (res) => {
+        const tempPath = res.tempFiles[0].tempFilePath
+        util.savePhoto(tempPath)
+          .then(path => this.setData({ avatar: path }))
+          .catch(() => wx.showToast({ title: '保存失败', icon: 'none' }))
+      }
+    })
+  },
   onSave() {
     const { name, gender, birthday, avatar, editId } = this.data
     if (!name.trim()) {

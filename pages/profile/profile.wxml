@@ -2,7 +2,8 @@
 
   <view class="me-card">
     <view wx:if="{{baby}}" class="me-top">
-      <view class="me-avatar">{{baby.avatar || '👶'}}</view>
+      <image wx:if="{{baby.avatar && baby.avatar[0] === '/'}}" class="me-avatar-img" src="{{baby.avatar}}" mode="aspectFill" />
+      <view wx:else class="me-avatar">{{baby.avatar || '👶'}}</view>
       <view class="me-info">
         <view class="me-name">{{baby.name}}</view>
         <view class="me-sub">{{ageText}} · 共 {{babyCount}} 个宝宝</view>
