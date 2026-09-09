@@ -52,13 +52,15 @@ Page({
       } else {
         summary = r.note || meta.label
       }
+      const hasPhoto = !!(r.photos && r.photos.length)
       return Object.assign({}, r, {
         dateText: util.formatDate(r.date),
         typeLabel: meta.label,
         typeIcon: meta.icon,
         typeColor: meta.color,
         summary,
-        hasPhoto: !!(r.photos && r.photos.length)
+        hasPhoto,
+        firstPhoto: hasPhoto ? r.photos[0] : ''
       })
     })
     this.setData({

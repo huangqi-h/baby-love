@@ -66,7 +66,10 @@
 
   <view wx:else class="timeline">
     <view class="timeline-item card" wx:for="{{records}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}">
-      <view class="tl-icon" style="background:{{item.typeColor}}1a;color:{{item.typeColor}}">{{item.typeIcon}}</view>
+      <view wx:if="{{item.firstPhoto}}" class="tl-icon-photo">
+        <image class="tl-icon-img" src="{{item.firstPhoto}}" mode="aspectFill" />
+      </view>
+      <view wx:else class="tl-icon" style="background:{{item.typeColor}}1a;color:{{item.typeColor}}">{{item.typeIcon}}</view>
       <view class="tl-body">
         <view class="tl-top">
           <text class="tl-type">{{item.typeLabel}}</text>

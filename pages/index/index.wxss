@@ -200,6 +200,19 @@
   text-overflow: ellipsis;
 }
 
+.tl-icon-photo {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 20rpx;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.tl-icon-img {
+  width: 80rpx;
+  height: 80rpx;
+}
+
 .tl-arrow {
   color: #ccc;
   font-size: 44rpx;

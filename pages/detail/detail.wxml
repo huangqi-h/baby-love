@@ -13,7 +13,7 @@
     <view wx:else class="detail-note">{{record.note}}</view>
 
     <view wx:if="{{record.photos.length}}" class="detail-photos">
-      <image wx:for="{{record.photos}}" wx:key="*this" class="detail-photo" src="{{item}}" mode="aspectFill" />
+      <image wx:for="{{record.photos}}" wx:key="*this" class="detail-photo" src="{{item}}" mode="aspectFill" bindtap="previewPhoto" data-index="{{index}}" />
     </view>
   </view>
 

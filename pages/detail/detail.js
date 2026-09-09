@@ -33,6 +33,12 @@ Page({
     wx.setNavigationBarTitle({ title: meta.label })
   },
 
+  previewPhoto(e) {
+    const idx = e.currentTarget.dataset.index
+    const urls = this.data.record.photos
+    wx.previewImage({ current: urls[idx], urls })
+  },
+
   onDelete() {
     wx.showModal({
       title: '删除记录',
