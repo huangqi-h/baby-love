@@ -1,6 +1,6 @@
 // 云同步封装：需在微信开发者工具中「开通云开发」并填入环境 ID 后启用
-const CLOUD_ENV = ''        // TODO: 填入你的云开发环境 ID
-const CLOUD_ENABLED = false // 开通并配置后改为 true
+const CLOUD_ENV = 'cloudbase-d6gw9cp23f1d12a6b'
+const CLOUD_ENABLED = true
 
 let cloudInited = false
 
