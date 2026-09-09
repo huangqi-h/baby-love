@@ -8,8 +8,11 @@ Page({
   },
   onShow() {
     cloud.autoSync().then(() => {
+      const list = store.getBabies().map(b => Object.assign({}, b, {
+        isImgAvatar: b.avatar && (b.avatar.startsWith('wxfile://') || b.avatar.startsWith('http') || b.avatar.startsWith('/'))
+      }))
       this.setData({
-        babies: store.getBabies(),
+        babies: list,
         currentId: store.getCurrentId()
       })
     })

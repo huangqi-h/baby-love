@@ -25,13 +25,13 @@
       <text class="label">选择一个头像</text>
       <view class="avatar-list">
         <view
-          wx:if="{{avatar && avatar[0] === '/'}}"
+          wx:if="{{isCustomAvatar}}"
           class="avatar-opt active"
           bindtap="onChooseAvatar">
           <image class="avatar-img" src="{{avatar}}" mode="aspectFill" />
         </view>
         <view
-          class="avatar-opt {{avatar === item ? 'active' : ''}}"
+          class="avatar-opt {{avatar === item && !isCustomAvatar ? 'active' : ''}}"
           wx:for="{{avatars}}"
           wx:key="*this"
           data-avatar="{{item}}"

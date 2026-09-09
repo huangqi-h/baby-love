@@ -4,7 +4,7 @@
 
   <view class="baby-list">
     <view class="baby-row card" wx:for="{{babies}}" wx:key="id">
-      <image wx:if="{{item.avatar && item.avatar[0] === '/'}}" class="br-avatar-img" src="{{item.avatar}}" mode="aspectFill" />
+      <image wx:if="{{item.isImgAvatar}}" class="br-avatar-img" src="{{item.avatar}}" mode="aspectFill" />
       <view wx:else class="br-avatar">{{item.avatar || '👶'}}</view>
       <view class="br-info">
         <view class="br-name">{{item.name}}</view>

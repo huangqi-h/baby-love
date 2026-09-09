@@ -41,7 +41,12 @@ Page({
   },
 
   refresh() {
-    const baby = store.getCurrentBaby()
+    let baby = store.getCurrentBaby()
+    if (baby) {
+      baby = Object.assign({}, baby, {
+        isImgAvatar: baby.avatar && (baby.avatar.startsWith('wxfile://') || baby.avatar.startsWith('http') || baby.avatar.startsWith('/'))
+      })
+    }
     const babyId = store.getCurrentId()
     const records = babyId ? store.getRecords(babyId) : []
     const list = records.slice(0, 10).map(r => {

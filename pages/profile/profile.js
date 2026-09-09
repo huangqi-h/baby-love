@@ -10,7 +10,12 @@ Page({
     shareId: ''
   },
   onShow() {
-    const baby = store.getCurrentBaby()
+    let baby = store.getCurrentBaby()
+    if (baby) {
+      baby = Object.assign({}, baby, {
+        isImgAvatar: baby.avatar && (baby.avatar.startsWith('wxfile://') || baby.avatar.startsWith('http') || baby.avatar.startsWith('/'))
+      })
+    }
     this.setData({
       baby,
       ageText: baby ? util.calcAge(baby.birthday) : '',

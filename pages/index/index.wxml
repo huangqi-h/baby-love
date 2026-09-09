@@ -3,7 +3,7 @@
   <!-- 宝宝信息卡片 -->
   <view class="baby-card" bindtap="toggleSwitcher">
     <view wx:if="{{baby}}" class="baby-info">
-      <image wx:if="{{baby.avatar && baby.avatar[0] === '/'}}" class="baby-avatar-img" src="{{baby.avatar}}" mode="aspectFill" />
+      <image wx:if="{{baby.isImgAvatar}}" class="baby-avatar-img" src="{{baby.avatar}}" mode="aspectFill" />
       <view wx:else class="baby-avatar">{{baby.avatar || '👶'}}</view>
       <view class="baby-text">
         <view class="baby-name">{{baby.name}}</view>

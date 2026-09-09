@@ -2,7 +2,7 @@
 
   <view class="me-card">
     <view wx:if="{{baby}}" class="me-top">
-      <image wx:if="{{baby.avatar && baby.avatar[0] === '/'}}" class="me-avatar-img" src="{{baby.avatar}}" mode="aspectFill" />
+      <image wx:if="{{baby.isImgAvatar}}" class="me-avatar-img" src="{{baby.avatar}}" mode="aspectFill" />
       <view wx:else class="me-avatar">{{baby.avatar || '👶'}}</view>
       <view class="me-info">
         <view class="me-name">{{baby.name}}</view>

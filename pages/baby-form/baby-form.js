@@ -12,6 +12,7 @@ Page({
     gender: 'boy',
     birthday: '',
     avatar: '👶',
+    isCustomAvatar: false,
     avatars: AVATARS,
     maxBirthday: MAX_BIRTHDAY,
     isEdit: false
@@ -20,12 +21,14 @@ Page({
     if (options.id) {
       const b = store.getBabyById(options.id)
       if (b) {
+        const isImg = b.avatar && (b.avatar.startsWith('wxfile://') || b.avatar.startsWith('http') || b.avatar.startsWith('/'))
         this.setData({
           editId: b.id,
           name: b.name,
           gender: b.gender,
           birthday: b.birthday,
           avatar: b.avatar,
+          isCustomAvatar: isImg,
           isEdit: true
         })
       }
@@ -34,7 +37,7 @@ Page({
   onNameInput(e) { this.setData({ name: e.detail.value }) },
   onGenderChange(e) { this.setData({ gender: e.detail.value }) },
   onBirthdayChange(e) { this.setData({ birthday: e.detail.value }) },
-  onAvatarTap(e) { this.setData({ avatar: e.currentTarget.dataset.avatar }) },
+  onAvatarTap(e) { this.setData({ avatar: e.currentTarget.dataset.avatar, isCustomAvatar: false }) },
   onChooseAvatar() {
     wx.chooseMedia({
       count: 1,
@@ -44,7 +47,7 @@ Page({
       success: (res) => {
         const tempPath = res.tempFiles[0].tempFilePath
         util.savePhoto(tempPath)
-          .then(path => this.setData({ avatar: path }))
+          .then(path => this.setData({ avatar: path, isCustomAvatar: true }))
           .catch(() => wx.showToast({ title: '保存失败', icon: 'none' }))
       }
     })
