@@ -62,5 +62,19 @@ exports.main = async (event) => {
     return { success: true, payload: doc.payload }
   }
 
+  if (action === 'members') {
+    if (!shareId) return { error: '缺少邀请码' }
+    const res = await db.collection('baby_share').where({ shareId: shareId.toUpperCase() }).limit(1).get()
+    if (!res.data.length) return { error: '邀请码不存在' }
+    const doc = res.data[0]
+    if (doc.members.indexOf(OPENID) < 0) return { error: '你不在该家庭内' }
+    return {
+      success: true,
+      members: doc.members,
+      count: doc.members.length,
+      isOwner: doc.owner === OPENID
+    }
+  }
+
   return { error: '未知 action' }
 }

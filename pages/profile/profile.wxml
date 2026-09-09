@@ -41,6 +41,10 @@
         <text class="share-label">当前家庭码</text>
         <text class="share-code">{{shareId}}</text>
       </view>
+      <view class="share-bar">
+        <text class="share-label">家庭成员</text>
+        <text class="share-code">{{memberCount}} 人 {{isOwner ? '(创建者)' : ''}}</text>
+      </view>
       <view class="menu-item" bindtap="syncNow">
         <text class="mi-icon">🔄</text><text class="mi-text">立即同步</text><text class="mi-arrow">›</text>
       </view>

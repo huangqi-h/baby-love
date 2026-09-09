@@ -7,7 +7,9 @@ Page({
     baby: null,
     ageText: '',
     babyCount: 0,
-    shareId: ''
+    shareId: '',
+    memberCount: 0,
+    isOwner: false
   },
   onShow() {
     let baby = store.getCurrentBaby()
@@ -16,12 +18,22 @@ Page({
         isImgAvatar: baby.avatar && (baby.avatar.startsWith('wxfile://') || baby.avatar.startsWith('http') || baby.avatar.startsWith('cloud://') || baby.avatar.startsWith('/'))
       })
     }
+    const shareId = store.getShareId()
     this.setData({
       baby,
       ageText: baby ? util.calcAge(baby.birthday) : '',
       babyCount: store.getBabies().length,
-      shareId: store.getShareId()
+      shareId
     })
+    if (shareId && cloud.CLOUD_ENABLED) {
+      cloud.getMembers(shareId)
+        .then(res => {
+          if (res.success) {
+            this.setData({ memberCount: res.count, isOwner: res.isOwner })
+          }
+        })
+        .catch(() => {})
+    }
   },
   goBabies() { wx.navigateTo({ url: '/pages/babies/babies' }) },
   goVaccine() { wx.navigateTo({ url: '/pages/vaccine/vaccine' }) },
