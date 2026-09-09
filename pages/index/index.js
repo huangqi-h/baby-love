@@ -28,7 +28,9 @@ Page({
     empty: true,
     babies: [],
     showSwitcher: false,
-    upcomingVaccines: []
+    upcomingVaccines: [],
+    pageSize: 10,
+    hasMore: false
   },
 
   onShow() {
@@ -48,8 +50,24 @@ Page({
       })
     }
     const babyId = store.getCurrentId()
-    const records = babyId ? store.getRecords(babyId) : []
-    const list = records.slice(0, 10).map(r => {
+    const all = babyId ? store.getRecords(babyId) : []
+    const pageSize = this.data.pageSize
+    const list = this.buildList(all, pageSize)
+    this.setData({
+      baby,
+      ageText: baby ? util.calcAge(baby.birthday) : '',
+      records: list,
+      empty: all.length === 0,
+      hasMore: all.length > pageSize,
+      babies: (store.getBabies() || []).map(b => Object.assign({}, b, {
+        isImgAvatar: b.avatar && (b.avatar.startsWith('wxfile://') || b.avatar.startsWith('http') || b.avatar.startsWith('cloud://') || b.avatar.startsWith('/'))
+      })),
+      upcomingVaccines: this.computeVaccines()
+    })
+  },
+
+  buildList(all, limit) {
+    return all.slice(0, limit).map(r => {
       const meta = util.typeMeta(r.type)
       let summary = ''
       if (r.type === 'height' || r.type === 'weight') {
@@ -68,15 +86,16 @@ Page({
         firstPhoto: hasPhoto ? r.photos[0] : ''
       })
     })
+  },
+
+  loadMore() {
+    const babyId = store.getCurrentId()
+    const all = babyId ? store.getRecords(babyId) : []
+    const pageSize = this.data.records.length + this.data.pageSize
+    const list = this.buildList(all, pageSize)
     this.setData({
-      baby,
-      ageText: baby ? util.calcAge(baby.birthday) : '',
       records: list,
-      empty: records.length === 0,
-      babies: (store.getBabies() || []).map(b => Object.assign({}, b, {
-        isImgAvatar: b.avatar && (b.avatar.startsWith('wxfile://') || b.avatar.startsWith('http') || b.avatar.startsWith('cloud://') || b.avatar.startsWith('/'))
-      })),
-      upcomingVaccines: this.computeVaccines()
+      hasMore: all.length > pageSize
     })
   },
 
@@ -143,6 +162,14 @@ Page({
 
   goVaccine() {
     wx.navigateTo({ url: '/pages/vaccine/vaccine' })
+  },
+
+  goChart() {
+    wx.switchTab({ url: '/pages/chart/chart' })
+  },
+
+  goAlbum() {
+    wx.navigateTo({ url: '/pages/album/album' })
   },
 
   markVaccine(e) {

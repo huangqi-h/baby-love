@@ -1,17 +1,22 @@
 <view class="container">
 
-  <view class="seg">
-    <view class="seg-item {{mode === 'height' ? 'active' : ''}}" data-mode="height" bindtap="onMode">身高曲线</view>
-    <view class="seg-item {{mode === 'weight' ? 'active' : ''}}" data-mode="weight" bindtap="onMode">体重曲线</view>
-  </view>
-
   <view class="card chart-card">
-    <canvas type="2d" id="chartCanvas" class="chart-canvas"></canvas>
-    <view wx:if="{{empty}}" class="chart-empty"></view>
+    <canvas type="2d" id="chartHeight" class="chart-canvas"></canvas>
+    <view wx:if="{{h.empty}}" class="chart-empty">
+      <text class="chart-empty-text">{{h.emptyText}}</text>
+    </view>
   </view>
+  <view wx:if="{{h.latest}}" class="latest">{{h.latest}}</view>
+  <view wx:if="{{h.whoLatest}}" class="who-line">┄ {{h.whoLatest}}</view>
 
-  <view wx:if="{{latest}}" class="latest">{{latest}}</view>
-  <view wx:if="{{whoLatest}}" class="who-line">┄ {{whoLatest}}</view>
+  <view class="card chart-card" style="margin-top: 24rpx;">
+    <canvas type="2d" id="chartWeight" class="chart-canvas"></canvas>
+    <view wx:if="{{w.empty}}" class="chart-empty">
+      <text class="chart-empty-text">{{w.emptyText}}</text>
+    </view>
+  </view>
+  <view wx:if="{{w.latest}}" class="latest">{{w.latest}}</view>
+  <view wx:if="{{w.whoLatest}}" class="who-line">┄ {{w.whoLatest}}</view>
 
   <view class="legend">
     <view class="legend-item"><view class="legend-dot solid"></view>宝宝数据</view>
@@ -19,5 +24,5 @@
     <view class="legend-item"><view class="legend-dot dash"></view>WHO 中位</view>
   </view>
 
-  <view class="hint text-muted">横坐标：出生后月龄　纵坐标：{{mode === 'height' ? '身高(cm)' : '体重(kg)'}}</view>
+  <view class="hint text-muted">横坐标：出生后月龄</view>
 </view>

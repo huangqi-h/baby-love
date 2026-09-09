@@ -9,7 +9,8 @@
     "pages/baby-form/baby-form",
     "pages/vaccine/vaccine",
     "pages/feed/feed",
-    "pages/backup/backup"
+    "pages/backup/backup",
+    "pages/album/album"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ff9a9e",

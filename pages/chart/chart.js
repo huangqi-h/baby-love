@@ -4,47 +4,61 @@ const who = require('../../utils/who.js')
 
 Page({
   data: {
-    mode: 'height',
-    empty: false,
-    latest: '',
-    whoLatest: ''
+    h: { empty: false, emptyText: '', latest: '', whoLatest: '' },
+    w: { empty: false, emptyText: '', latest: '', whoLatest: '' }
   },
 
   onReady() {
     this.inited = true
-    this.draw()
+    const draw = () => this.draw()
+    if (typeof wx.nextTick === 'function') {
+      wx.nextTick(draw)
+    } else {
+      setTimeout(draw, 50)
+    }
   },
 
   onShow() {
-    if (this.inited) this.draw()
+    if (this.inited) this.draw(true)
   },
 
-  onMode(e) {
-    const mode = e.currentTarget.dataset.mode
-    if (mode === this.data.mode) return
-    this.setData({ mode }, () => this.draw())
+  draw(retry = false) {
+    this.drawOne('height', 'chartHeight', retry)
+    this.drawOne('weight', 'chartWeight', retry)
   },
 
-  draw() {
+  drawOne(mode, canvasId, retry = false) {
     const query = wx.createSelectorQuery()
-    query.select('#chartCanvas')
+    query.select('#' + canvasId)
       .fields({ node: true, size: true })
       .exec((res) => {
-        if (!res || !res[0] || !res[0].node) return
+        if (!res || !res[0] || !res[0].node) {
+          if (retry) setTimeout(() => this.drawOne(mode, canvasId, false), 200)
+          return
+        }
+        const w = res[0].width
+        const h = res[0].height
+        if (w <= 0 || h <= 0) {
+          if (retry) setTimeout(() => this.drawOne(mode, canvasId, false), 200)
+          return
+        }
         const canvas = res[0].node
-        const ctx = canvas.getContext('2d')
         const dpr = (wx.getSystemInfoSync().pixelRatio) || 2
-        canvas.width = res[0].width * dpr
-        canvas.height = res[0].height * dpr
+        canvas.width = w * dpr
+        canvas.height = h * dpr
+        const ctx = canvas.getContext('2d')
         ctx.scale(dpr, dpr)
-        this.render(ctx, res[0].width, res[0].height)
+        const state = this.render(ctx, mode, w, h)
+        const key = mode === 'height' ? 'h' : 'w'
+        const update = {}
+        update[key] = state
+        this.setData(update)
       })
   },
 
-  render(ctx, w, h) {
+  render(ctx, mode, w, h) {
     ctx.clearRect(0, 0, w, h)
     const baby = store.getCurrentBaby()
-    const mode = this.data.mode
     const meta = util.typeMeta(mode)
     const records = store.getCurrentId()
       ? store.getRecords(store.getCurrentId())
@@ -54,22 +68,11 @@ Page({
       .sort((a, b) => new Date(a.date) - new Date(b.date))
 
     if (!baby) {
-      this.setData({ empty: true, latest: '', whoLatest: '' })
-      ctx.fillStyle = '#bbb'
-      ctx.font = '14px sans-serif'
-      ctx.textAlign = 'center'
-      ctx.fillText('请先在首页添加宝宝', w / 2, h / 2)
-      return
+      return { empty: true, emptyText: '请先在首页添加宝宝', latest: '', whoLatest: '' }
     }
     if (userRecords.length === 0) {
-      this.setData({ empty: true, latest: '', whoLatest: '' })
-      ctx.fillStyle = '#bbb'
-      ctx.font = '14px sans-serif'
-      ctx.textAlign = 'center'
-      ctx.fillText(`暂无${meta.label}数据`, w / 2, h / 2)
-      return
+      return { empty: true, emptyText: `暂无${meta.label}数据`, latest: '', whoLatest: '' }
     }
-    this.setData({ empty: false })
 
     const userPoints = userRecords.map(r => ({
       month: util.monthsFromBirth(baby.birthday, r.date),
@@ -77,14 +80,15 @@ Page({
     }))
 
     const band = who.whoBand(baby.gender, mode)
-    const maxX = Math.max(1, ...userPoints.map(p => p.month))
+    let maxX = Math.max(1, ...userPoints.map(p => p.month))
+    if (!isFinite(maxX)) maxX = 1
     const bpts = band.filter(p => p.month <= maxX)
 
     // 坐标范围（纳入用户数据与 WHO 参考区间）
     const yVals = userPoints.map(p => p.val)
       .concat(bpts.map(p => p.p3), bpts.map(p => p.p97))
-    let maxY = Math.max(...yVals) * 1.1
-    let minY = Math.min(...yVals)
+    let maxY = yVals.length ? Math.max(...yVals) * 1.1 : 10
+    let minY = yVals.length ? Math.min(...yVals) : 0
     if (minY > 0) minY = Math.max(0, minY * 0.9)
     else minY = 0
 
@@ -182,10 +186,17 @@ Page({
     })
 
     const last = userPoints[userPoints.length - 1]
-    const whoLast = bpts.reduce((a, p) => (p.month <= last.month ? p : a), bpts[0])
-    this.setData({
-      latest: `宝宝（${last.month.toFixed(1)}个月）：${last.val}${meta.unit}`,
-      whoLatest: `WHO中位（${whoLast.month}个月）：${whoLast.p50}${meta.unit}`
-    })
+    let latest = `宝宝（${last.month.toFixed(1)}个月）：${last.val}${meta.unit}`
+    let whoLatest = ''
+    if (bpts.length) {
+      const whoLast = bpts.reduce((a, p) => (p.month <= last.month ? p : a), bpts[0])
+      whoLatest = `WHO中位（${whoLast.month}个月）：${whoLast.p50}${meta.unit}`
+    }
+    return {
+      empty: false,
+      emptyText: '',
+      latest,
+      whoLatest
+    }
   }
 })

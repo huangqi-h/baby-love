@@ -43,6 +43,26 @@
     </view>
   </view>
 
+  <!-- 快捷入口 -->
+  <view wx:if="{{baby}}" class="quick-grid">
+    <view class="quick-item" bindtap="goAdd">
+      <view class="qi-icon" style="background:#fff3cd;color:#b8860b">📝</view>
+      <text class="qi-text">添加记录</text>
+    </view>
+    <view class="quick-item" bindtap="goVaccine">
+      <view class="qi-icon" style="background:#ffe0e0;color:#e2657a">💉</view>
+      <text class="qi-text">疫苗档案</text>
+    </view>
+    <view class="quick-item" bindtap="goChart">
+      <view class="qi-icon" style="background:#e8f4ff;color:#4dabf7">📏</view>
+      <text class="qi-text">生长记录</text>
+    </view>
+    <view class="quick-item" bindtap="goAlbum">
+      <view class="qi-icon" style="background:#f0e8ff;color:#9775fa">🖼️</view>
+      <text class="qi-text">成长相册</text>
+    </view>
+  </view>
+
   <!-- 近期待办疫苗 -->
   <view wx:if="{{upcomingVaccines.length}}" class="vac-card" bindtap="goVaccine">
     <view class="vac-head">
@@ -82,6 +102,8 @@
       <view class="tl-arrow">›</view>
     </view>
   </view>
+
+  <view wx:if="{{hasMore}}" class="load-more" bindtap="loadMore">加载更多历史记录</view>
 
   <!-- 悬浮添加按钮 -->
   <view class="fab" bindtap="goAdd">＋</view>

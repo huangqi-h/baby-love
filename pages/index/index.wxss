@@ -51,6 +51,36 @@
   opacity: 0.9;
 }
 
+.quick-grid {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24rpx;
+}
+
+.quick-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 0;
+}
+
+.qi-icon {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44rpx;
+}
+
+.qi-text {
+  margin-top: 14rpx;
+  font-size: 24rpx;
+  color: #666;
+}
+
 .section-title {
   margin: 40rpx 8rpx 20rpx;
   font-size: 30rpx;
@@ -299,4 +329,11 @@
   color: #ff6b81;
   font-size: 28rpx;
   border-top: 1rpx solid #f3f3f3;
+}
+
+.load-more {
+  text-align: center;
+  padding: 32rpx;
+  font-size: 26rpx;
+  color: #ff6b81;
 }

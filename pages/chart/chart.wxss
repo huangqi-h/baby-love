@@ -24,6 +24,7 @@
 .chart-card {
   padding: 20rpx;
   position: relative;
+  min-height: 400rpx;
 }
 
 .chart-canvas {
@@ -37,6 +38,15 @@
   left: 0;
   right: 0;
   bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+}
+
+.chart-empty-text {
+  font-size: 30rpx;
+  color: #bbb;
 }
 
 .latest {

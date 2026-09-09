@@ -1,0 +1,16 @@
+<view class="container">
+  <view wx:if="{{empty}}" class="empty-box">
+    <view class="empty-emoji">🖼️</view>
+    <view class="empty-text">还没有照片，去「添加记录」上传吧～</view>
+  </view>
+
+  <view wx:else class="photo-grid">
+    <view class="photo-item" wx:for="{{photos}}" wx:key="id" bindtap="preview" data-index="{{index}}">
+      <image class="photo-img" src="{{item.url}}" mode="aspectFill" />
+      <view class="photo-meta">
+        <text class="photo-type">{{item.typeLabel}}</text>
+        <text class="photo-date">{{item.dateText}}</text>
+      </view>
+    </view>
+  </view>
+</view>
