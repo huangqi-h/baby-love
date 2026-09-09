@@ -92,13 +92,26 @@ Page({
       sizeType: ['compressed'],
       success: (res) => {
         const temps = res.tempFiles.map(f => f.tempFilePath)
-        Promise.all(temps.map(t => util.savePhoto(t)))
-          .then(paths => {
-            this.setData({ photos: this.data.photos.concat(paths) })
-          })
-          .catch(() => {
-            wx.showToast({ title: '图片保存失败', icon: 'none' })
-          })
+        if (cloud.CLOUD_ENABLED) {
+          wx.showLoading({ title: '上传中…' })
+          Promise.all(temps.map(t => cloud.uploadFile(t, 'records')))
+            .then(fileIDs => {
+              wx.hideLoading()
+              this.setData({ photos: this.data.photos.concat(fileIDs) })
+            })
+            .catch(() => {
+              wx.hideLoading()
+              wx.showToast({ title: '上传失败', icon: 'none' })
+            })
+        } else {
+          Promise.all(temps.map(t => util.savePhoto(t)))
+            .then(paths => {
+              this.setData({ photos: this.data.photos.concat(paths) })
+            })
+            .catch(() => {
+              wx.showToast({ title: '图片保存失败', icon: 'none' })
+            })
+        }
       }
     })
   },

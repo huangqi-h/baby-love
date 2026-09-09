@@ -84,4 +84,18 @@ function autoSync() {
     .catch(() => false)
 }
 
-module.exports = { CLOUD_ENABLED, upload, download, subscribe, createShare, joinShare, syncShare, autoSync }
+// 上传文件到云存储，返回永久 cloud:// fileID（<image> 直接支持）
+function uploadFile(tempPath, dir = 'photos') {
+  if (!ensureCloud()) return Promise.reject(new Error('cloud disabled'))
+  const ext = (tempPath.match(/\.(\w+)$/) || [, 'jpg'])[1] || 'jpg'
+  const cloudPath = `${dir}/${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${ext}`
+  return wx.cloud.uploadFile({
+    cloudPath,
+    filePath: tempPath
+  }).then(res => {
+    if (!res || !res.fileID) return Promise.reject(new Error('uploadFile missing fileID'))
+    return res.fileID
+  })
+}
+
+module.exports = { CLOUD_ENABLED, upload, download, subscribe, createShare, joinShare, syncShare, autoSync, uploadFile }

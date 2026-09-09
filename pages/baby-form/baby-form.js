@@ -21,7 +21,7 @@ Page({
     if (options.id) {
       const b = store.getBabyById(options.id)
       if (b) {
-        const isImg = b.avatar && (b.avatar.startsWith('wxfile://') || b.avatar.startsWith('http') || b.avatar.startsWith('/'))
+        const isImg = b.avatar && (b.avatar.startsWith('wxfile://') || b.avatar.startsWith('http') || b.avatar.startsWith('cloud://') || b.avatar.startsWith('/'))
         this.setData({
           editId: b.id,
           name: b.name,
@@ -46,9 +46,22 @@ Page({
       sourceType: ['album', 'camera'],
       success: (res) => {
         const tempPath = res.tempFiles[0].tempFilePath
-        util.savePhoto(tempPath)
-          .then(path => this.setData({ avatar: path, isCustomAvatar: true }))
-          .catch(() => wx.showToast({ title: '保存失败', icon: 'none' }))
+        if (cloud.CLOUD_ENABLED) {
+          wx.showLoading({ title: '上传中…' })
+          cloud.uploadFile(tempPath, 'avatars')
+            .then(fileID => {
+              wx.hideLoading()
+              this.setData({ avatar: fileID, isCustomAvatar: true })
+            })
+            .catch(() => {
+              wx.hideLoading()
+              wx.showToast({ title: '上传失败', icon: 'none' })
+            })
+        } else {
+          util.savePhoto(tempPath)
+            .then(path => this.setData({ avatar: path, isCustomAvatar: true }))
+            .catch(() => wx.showToast({ title: '保存失败', icon: 'none' }))
+        }
       }
     })
   },

@@ -35,8 +35,20 @@ Page({
 
   previewPhoto(e) {
     const idx = e.currentTarget.dataset.index
-    const urls = this.data.record.photos
-    wx.previewImage({ current: urls[idx], urls })
+    const rawUrls = this.data.record.photos || []
+    const hasCloud = rawUrls.some(u => u.startsWith('cloud://'))
+    if (hasCloud && cloud.CLOUD_ENABLED) {
+      wx.cloud.getTempFileURL({
+        fileList: rawUrls,
+        success: res => {
+          const urls = res.fileList.map(f => f.tempFileURL)
+          wx.previewImage({ current: urls[idx], urls })
+        },
+        fail: () => wx.showToast({ title: '预览失败', icon: 'none' })
+      })
+    } else {
+      wx.previewImage({ current: rawUrls[idx], urls: rawUrls })
+    }
   },
 
   onDelete() {

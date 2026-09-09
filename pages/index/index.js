@@ -44,7 +44,7 @@ Page({
     let baby = store.getCurrentBaby()
     if (baby) {
       baby = Object.assign({}, baby, {
-        isImgAvatar: baby.avatar && (baby.avatar.startsWith('wxfile://') || baby.avatar.startsWith('http') || baby.avatar.startsWith('/'))
+        isImgAvatar: baby.avatar && (baby.avatar.startsWith('wxfile://') || baby.avatar.startsWith('http') || baby.avatar.startsWith('cloud://') || baby.avatar.startsWith('/'))
       })
     }
     const babyId = store.getCurrentId()
