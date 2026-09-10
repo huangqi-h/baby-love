@@ -73,6 +73,12 @@ function getRecordById(babyId, id) {
   return getRecords(babyId).find(r => r.id === id) || null
 }
 
+function updateRecord(babyId, id, patch) {
+  const records = getRecords(babyId).map(r => r.id === id ? Object.assign({}, r, patch) : r)
+  saveRecords(babyId, records)
+  return records
+}
+
 /* ---------- 疫苗 ---------- */
 function getVaccines(babyId) {
   const all = wx.getStorageSync(VACCINE_KEY) || {}
@@ -142,7 +148,7 @@ function clearShareId() { wx.removeStorageSync(SHARE_KEY) }
 module.exports = {
   getBabies, saveBabies, getCurrentId, setCurrentId, getBabyById, getCurrentBaby,
   addBaby, updateBaby, deleteBaby,
-  getRecords, saveRecords, addRecord, deleteRecord, getRecordById,
+  getRecords, saveRecords, addRecord, deleteRecord, getRecordById, updateRecord,
   getVaccines, toggleVaccine,
   getFeeds, saveFeeds, addFeed, deleteFeed,
   exportAll, importAll,

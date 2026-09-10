@@ -70,7 +70,12 @@ Page({
     return all.slice(0, limit).map(r => {
       const meta = util.typeMeta(r.type)
       let summary = ''
-      if (r.type === 'height' || r.type === 'weight') {
+      if (r.type === 'measure' && r.value && typeof r.value === 'object') {
+        const parts = []
+        if (r.value.height) parts.push(`身高 ${r.value.height}cm`)
+        if (r.value.weight) parts.push(`体重 ${r.value.weight}kg`)
+        summary = parts.join(' / ')
+      } else if (r.type === 'height' || r.type === 'weight') {
         summary = `${r.value}${meta.unit}`
       } else {
         summary = r.note || meta.label

@@ -25,6 +25,7 @@
   padding: 20rpx;
   position: relative;
   min-height: 400rpx;
+  background: #fff0f1;
 }
 
 .chart-canvas {
@@ -41,11 +42,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.85);
 }
 
 .chart-empty-text {
-  font-size: 30rpx;
+  font-size: 28rpx;
   color: #bbb;
 }
 
@@ -91,13 +92,125 @@
 }
 
 .legend-dot.dash {
-  border-top: 4rpx dashed #c0c0c0;
+  border-top: 4rpx dashed #ffb3b8;
 }
 
 .legend-dot.band {
   width: 28rpx;
   height: 16rpx;
-  background: rgba(120, 120, 120, 0.18);
-  border-top: 1rpx solid #999;
-  border-bottom: 1rpx solid #999;
+  background: rgba(255, 154, 158, 0.28);
+  border-top: 1rpx solid #ff9a9e;
+  border-bottom: 1rpx solid #ff9a9e;
+}
+
+/* 记录列表 */
+.empty-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 40rpx;
+}
+
+.empty-emoji {
+  font-size: 80rpx;
+  margin-bottom: 24rpx;
+}
+
+.empty-text {
+  font-size: 30rpx;
+  color: #666;
+  margin-bottom: 12rpx;
+}
+
+.empty-sub {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.record-list {
+  padding-bottom: 40rpx;
+}
+
+.record-group {
+  margin-bottom: 24rpx;
+}
+
+.group-date {
+  font-size: 26rpx;
+  color: #999;
+  margin: 16rpx 8rpx 12rpx;
+}
+
+.group-items {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.record-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 32rpx;
+}
+
+.ri-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.ri-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  margin-right: 24rpx;
+  flex-shrink: 0;
+}
+
+.ri-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.ri-type {
+  font-size: 26rpx;
+  color: #888;
+  margin-bottom: 6rpx;
+}
+
+.ri-value {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.ri-actions {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.ri-btn {
+  font-size: 24rpx;
+  padding: 10rpx 24rpx;
+  border-radius: 999rpx;
+  border: 2rpx solid #eee;
+  color: #666;
+  background: #fff;
+}
+
+.ri-btn.edit {
+  color: #4dabf7;
+  border-color: #cfe8ff;
+}
+
+.ri-btn.delete {
+  color: #ff6b81;
+  border-color: #ffd0d6;
 }

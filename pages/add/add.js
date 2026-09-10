@@ -2,30 +2,73 @@ const store = require('../../utils/store.js')
 const util = require('../../utils/util.js')
 const cloud = require('../../utils/cloud.js')
 
-const TYPES = ['height', 'weight', 'diary', 'milestone']
+const TYPES = ['measure', 'diary', 'milestone']
+
+const MEASURE_META = { label: '身高体重', icon: '📏', color: '#4dabf7', unit: '' }
 
 Page({
   data: {
     types: TYPES.map(t => {
+      if (t === 'measure') return { key: t, ...MEASURE_META }
       const m = util.typeMeta(t)
       return { key: t, label: m.label, icon: m.icon, color: m.color, unit: m.unit }
     }),
-    activeType: 'height',
+    activeType: 'measure',
     date: '',
     value: '',
     note: '',
     unit: 'cm',
     today: '',
-    photos: []
+    photos: [],
+    // 同时添加身高体重
+    heightValue: '',
+    weightValue: '',
+    // 编辑模式
+    editId: '',
+    isEdit: false
   },
 
-  onLoad() {
+  onLoad(options) {
     const today = util.formatDate(new Date())
     this.setData({ date: today, today })
+
+    // 编辑模式
+    if (options.id && options.type) {
+      const babyId = store.getCurrentId()
+      const r = store.getRecordById(babyId, options.id)
+      if (r) {
+        const meta = util.typeMeta(r.type)
+        const isMeasure = r.type === 'measure' || r.type === 'height' || r.type === 'weight'
+        const patch = {
+          activeType: r.type,
+          date: util.formatDate(r.date),
+          editId: r.id,
+          isEdit: true,
+          photos: r.photos || []
+        }
+        if (r.type === 'measure' && r.value && typeof r.value === 'object') {
+          patch.heightValue = r.value.height ? String(r.value.height) : ''
+          patch.weightValue = r.value.weight ? String(r.value.weight) : ''
+        } else if (isMeasure) {
+          patch.value = String(r.value)
+          patch.unit = meta.unit
+          if (r.type === 'height') patch.heightValue = String(r.value)
+          if (r.type === 'weight') patch.weightValue = String(r.value)
+        } else {
+          patch.note = r.note || ''
+        }
+        this.setData(patch)
+        wx.setNavigationBarTitle({ title: '编辑' + meta.label })
+      }
+    }
   },
 
   onTypeTap(e) {
     const t = e.currentTarget.dataset.type
+    if (t === 'measure') {
+      this.setData({ activeType: t, unit: '' })
+      return
+    }
     const meta = util.typeMeta(t)
     this.setData({
       activeType: t,
@@ -45,43 +88,93 @@ Page({
     this.setData({ note: e.detail.value })
   },
 
+  onHeightInput(e) {
+    this.setData({ heightValue: e.detail.value })
+  },
+
+  onWeightInput(e) {
+    this.setData({ weightValue: e.detail.value })
+  },
+
   onSave() {
     const babyId = store.getCurrentId()
     if (!babyId) {
       wx.showToast({ title: '请先添加宝宝', icon: 'none' })
       return
     }
-    const { activeType, date, value, note } = this.data
-    const isMeasure = activeType === 'height' || activeType === 'weight'
+    const { activeType, date, value, note, heightValue, weightValue, isEdit, editId } = this.data
+    const isMeasure = activeType === 'measure' || activeType === 'height' || activeType === 'weight'
 
     if (isMeasure) {
-      const v = parseFloat(value)
-      if (!v || v <= 0) {
-        wx.showToast({ title: '请输入有效数值', icon: 'none' })
+      const h = parseFloat(heightValue)
+      const w = parseFloat(weightValue)
+      if ((!h || h <= 0) && (!w || w <= 0)) {
+        wx.showToast({ title: '请至少输入身高或体重', icon: 'none' })
         return
       }
+
+      if (isEdit) {
+        store.updateRecord(babyId, editId, {
+          date: date + 'T00:00:00',
+          value: { height: h || null, weight: w || null },
+          photos: this.data.photos
+        })
+        this.syncAndBack('已更新')
+        return
+      }
+
+      // 新增：身高和体重合并为一条记录
+      const record = {
+        id: util.genId(),
+        type: 'measure',
+        date: date + 'T00:00:00',
+        value: { height: h || null, weight: w || null },
+        note: '',
+        photos: this.data.photos,
+        createdAt: Date.now()
+      }
+      store.addRecord(babyId, record)
+      this.syncAndBack('已记录')
     } else {
+      // 日记/里程碑
       if (!note.trim()) {
         wx.showToast({ title: '请输入内容', icon: 'none' })
         return
       }
+      if (isEdit) {
+        store.updateRecord(babyId, editId, {
+          date: date + 'T00:00:00',
+          note: note.trim(),
+          photos: this.data.photos
+        })
+        this.syncAndBack('已更新')
+        return
+      }
+      const record = {
+        id: util.genId(),
+        type: activeType,
+        date: date + 'T00:00:00',
+        value: '',
+        note: note.trim(),
+        photos: this.data.photos,
+        createdAt: Date.now()
+      }
+      store.addRecord(babyId, record)
+      this.syncAndBack('已记录')
     }
+  },
 
-    const record = {
-      id: util.genId(),
-      type: activeType,
-      date: date + 'T00:00:00',
-      value: isMeasure ? parseFloat(value) : '',
-      note: isMeasure ? '' : note.trim(),
-      photos: this.data.photos,
-      createdAt: Date.now()
+  syncAndBack(title) {
+    const doSync = () => {
+      if (store.getShareId() && cloud.CLOUD_ENABLED) {
+        return cloud.syncShare(store.getShareId(), store.exportAll())
+      }
+      return Promise.resolve()
     }
-    store.addRecord(babyId, record)
-    if (store.getShareId() && cloud.CLOUD_ENABLED) {
-      cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
-    }
-    wx.showToast({ title: '已记录', icon: 'success' })
-    setTimeout(() => wx.navigateBack(), 500)
+    doSync().catch(() => {}).then(() => {
+      wx.showToast({ title, icon: 'success' })
+      setTimeout(() => wx.navigateBack(), 400)
+    })
   },
 
   onChoosePhoto() {

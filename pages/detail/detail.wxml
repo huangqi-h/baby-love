@@ -7,10 +7,11 @@
     <view class="detail-type">{{record.typeLabel}}</view>
     <view class="detail-date text-muted">{{record.dateText}}</view>
 
-    <view wx:if="{{record.measureText}}" class="detail-measure">
-      {{record.measureText}}
+    <view wx:if="{{record.isMeasure && record.measureLines.length}}" class="detail-measure">
+      <text wx:for="{{record.measureLines}}" wx:key="*this">{{item}}
+</text>
     </view>
-    <view wx:else class="detail-note">{{record.note}}</view>
+    <view wx:elif="{{record.note}}" class="detail-note">{{record.note}}</view>
 
     <view wx:if="{{record.photos.length}}" class="detail-photos">
       <image wx:for="{{record.photos}}" wx:key="*this" class="detail-photo" src="{{item}}" mode="aspectFill" bindtap="previewPhoto" data-index="{{index}}" />

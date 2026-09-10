@@ -21,12 +21,23 @@ Page({
       return
     }
     const meta = util.typeMeta(r.type)
+    let measureText = ''
+    if (r.type === 'measure' && r.value && typeof r.value === 'object') {
+      const parts = []
+      if (r.value.height) parts.push(`身高 ${r.value.height} cm`)
+      if (r.value.weight) parts.push(`体重 ${r.value.weight} kg`)
+      measureText = parts.join('\n')
+    } else if (r.type === 'height' || r.type === 'weight') {
+      measureText = `${r.value} ${meta.unit}`
+    }
     const display = Object.assign({}, r, {
       typeLabel: meta.label,
       typeIcon: meta.icon,
       typeColor: meta.color,
       dateText: util.formatDate(r.date),
-      measureText: (r.type === 'height' || r.type === 'weight') ? `${r.value} ${meta.unit}` : '',
+      measureText,
+      measureLines: measureText ? measureText.split('\n') : [],
+      isMeasure: r.type === 'measure' || r.type === 'height' || r.type === 'weight',
       photos: r.photos || []
     })
     this.setData({ record: display })

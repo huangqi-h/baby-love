@@ -39,6 +39,7 @@ function genId() {
 const TYPE_META = {
   height: { label: '身高', unit: 'cm', icon: '📏', color: '#4dabf7' },
   weight: { label: '体重', unit: 'kg', icon: '⚖️', color: '#ffa94d' },
+  measure: { label: '身高体重', unit: '', icon: '📏', color: '#4dabf7' },
   diary: { label: '日记', unit: '', icon: '📝', color: '#9775fa' },
   milestone: { label: '里程碑', unit: '', icon: '🌟', color: '#ff6b81' }
 }

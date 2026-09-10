@@ -1,28 +1,78 @@
 <view class="container">
 
-  <view class="card chart-card">
-    <canvas type="2d" id="chartHeight" class="chart-canvas"></canvas>
-    <view wx:if="{{h.empty}}" class="chart-empty">
-      <text class="chart-empty-text">{{h.emptyText}}</text>
+  <!-- Tab 切换 -->
+  <view class="seg">
+    <view class="seg-item {{tab === 'height' ? 'active' : ''}}" data-tab="height" bindtap="switchTab">身高曲线</view>
+    <view class="seg-item {{tab === 'weight' ? 'active' : ''}}" data-tab="weight" bindtap="switchTab">体重曲线</view>
+    <view class="seg-item {{tab === 'list' ? 'active' : ''}}" data-tab="list" bindtap="switchTab">记录列表</view>
+  </view>
+
+  <!-- 身高曲线 -->
+  <view wx:if="{{tab === 'height'}}" class="tab-panel">
+    <view class="card chart-card">
+      <canvas type="2d" id="chartHeight" class="chart-canvas"></canvas>
+      <view wx:if="{{h.emptyText}}" class="chart-empty">
+        <text class="chart-empty-text">{{h.emptyText}}</text>
+      </view>
+    </view>
+    <view wx:if="{{h.latest}}" class="latest">{{h.latest}}</view>
+    <view wx:if="{{h.whoLatest}}" class="who-line">┄ {{h.whoLatest}}</view>
+
+    <view class="legend">
+      <view class="legend-item"><view class="legend-dot solid"></view>宝宝数据</view>
+      <view class="legend-item"><view class="legend-dot band"></view>WHO P3–P97</view>
+      <view class="legend-item"><view class="legend-dot dash"></view>WHO 中位</view>
+    </view>
+    <view class="hint text-muted">横坐标：出生后月龄</view>
+  </view>
+
+  <!-- 体重曲线 -->
+  <view wx:if="{{tab === 'weight'}}" class="tab-panel">
+    <view class="card chart-card">
+      <canvas type="2d" id="chartWeight" class="chart-canvas"></canvas>
+      <view wx:if="{{w.emptyText}}" class="chart-empty">
+        <text class="chart-empty-text">{{w.emptyText}}</text>
+      </view>
+    </view>
+    <view wx:if="{{w.latest}}" class="latest">{{w.latest}}</view>
+    <view wx:if="{{w.whoLatest}}" class="who-line">┄ {{w.whoLatest}}</view>
+
+    <view class="legend">
+      <view class="legend-item"><view class="legend-dot solid"></view>宝宝数据</view>
+      <view class="legend-item"><view class="legend-dot band"></view>WHO P3–P97</view>
+      <view class="legend-item"><view class="legend-dot dash"></view>WHO 中位</view>
+    </view>
+    <view class="hint text-muted">横坐标：出生后月龄</view>
+  </view>
+
+  <!-- 记录列表 -->
+  <view wx:if="{{tab === 'list'}}" class="tab-panel">
+    <view wx:if="{{emptyList}}" class="empty-box">
+      <view class="empty-emoji">📏</view>
+      <view class="empty-text">还没有身高/体重记录</view>
+      <view class="empty-sub">去添加记录页添加第一条数据吧～</view>
+    </view>
+
+    <view wx:else class="record-list">
+      <view class="record-group" wx:for="{{list}}" wx:key="date">
+        <view class="group-date">{{item.date}}</view>
+        <view class="group-items">
+          <view class="record-item card" wx:for="{{item.items}}" wx:for-item="r" wx:key="id">
+            <view class="ri-left">
+              <view class="ri-icon" style="background:{{r.typeColor}}1a;color:{{r.typeColor}}">{{r.typeIcon}}</view>
+              <view class="ri-body">
+                <view class="ri-type">{{r.typeLabel}}</view>
+                <view class="ri-value">{{r.summary}}</view>
+              </view>
+            </view>
+            <view class="ri-actions">
+              <view class="ri-btn edit" bindtap="goEdit" data-id="{{r.id}}" data-type="{{r.editType}}">编辑</view>
+              <view class="ri-btn delete" bindtap="onDelete" data-id="{{r.id}}">删除</view>
+            </view>
+          </view>
+        </view>
+      </view>
     </view>
   </view>
-  <view wx:if="{{h.latest}}" class="latest">{{h.latest}}</view>
-  <view wx:if="{{h.whoLatest}}" class="who-line">┄ {{h.whoLatest}}</view>
 
-  <view class="card chart-card" style="margin-top: 24rpx;">
-    <canvas type="2d" id="chartWeight" class="chart-canvas"></canvas>
-    <view wx:if="{{w.empty}}" class="chart-empty">
-      <text class="chart-empty-text">{{w.emptyText}}</text>
-    </view>
-  </view>
-  <view wx:if="{{w.latest}}" class="latest">{{w.latest}}</view>
-  <view wx:if="{{w.whoLatest}}" class="who-line">┄ {{w.whoLatest}}</view>
-
-  <view class="legend">
-    <view class="legend-item"><view class="legend-dot solid"></view>宝宝数据</view>
-    <view class="legend-item"><view class="legend-dot band"></view>WHO P3–P97</view>
-    <view class="legend-item"><view class="legend-dot dash"></view>WHO 中位</view>
-  </view>
-
-  <view class="hint text-muted">横坐标：出生后月龄</view>
 </view>

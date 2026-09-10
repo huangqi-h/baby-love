@@ -22,14 +22,35 @@
       </picker>
     </view>
 
-    <!-- 身高/体重：数值输入 -->
-    <view wx:if="{{activeType === 'height' || activeType === 'weight'}}" class="form-row">
-      <text class="label">数值</text>
-      <view class="value-box">
-        <input class="value-input" type="digit" placeholder="0" value="{{value}}" bindinput="onValueInput" />
-        <text class="value-unit">{{unit}}</text>
+    <!-- 身高/体重输入 -->
+    <block wx:if="{{activeType === 'measure' || activeType === 'height' || activeType === 'weight'}}">
+      <!-- 编辑旧数据（单条 height/weight）时只显示一个输入框 -->
+      <view wx:if="{{isEdit && (activeType === 'height' || activeType === 'weight')}}" class="form-row">
+        <text class="label">{{activeType === 'weight' ? '体重' : '身高'}}</text>
+        <view class="value-box">
+          <input class="value-input" type="digit" placeholder="0" value="{{value}}" bindinput="onValueInput" />
+          <text class="value-unit">{{unit}}</text>
+        </view>
       </view>
-    </view>
+
+      <!-- 新增 measure 或编辑 measure：同时显示身高+体重 -->
+      <block wx:else>
+        <view class="form-row">
+          <text class="label">身高（可选）</text>
+          <view class="value-box">
+            <input class="value-input" type="digit" placeholder="0" value="{{heightValue}}" bindinput="onHeightInput" />
+            <text class="value-unit">cm</text>
+          </view>
+        </view>
+        <view class="form-row">
+          <text class="label">体重（可选）</text>
+          <view class="value-box">
+            <input class="value-input" type="digit" placeholder="0" value="{{weightValue}}" bindinput="onWeightInput" />
+            <text class="value-unit">kg</text>
+          </view>
+        </view>
+      </block>
+    </block>
 
     <!-- 日记/里程碑：文本输入 -->
     <view wx:else class="form-row column">
@@ -50,5 +71,5 @@
     </view>
   </view>
 
-  <button class="btn-primary save-btn" bindtap="onSave">保存记录</button>
+  <button class="btn-primary save-btn" bindtap="onSave">{{isEdit ? '保存修改' : '保存记录'}}</button>
 </view>

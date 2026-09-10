@@ -1,0 +1,30 @@
+<view class="container">
+
+  <view wx:if="{{empty}}" class="empty-box">
+    <view class="empty-emoji">📏</view>
+    <view class="empty-text">还没有身高/体重记录</view>
+    <view class="empty-sub">去添加记录页添加第一条数据吧～</view>
+  </view>
+
+  <view wx:else class="record-list">
+    <view class="record-group" wx:for="{{list}}" wx:key="date">
+      <view class="group-date">{{item.date}}</view>
+      <view class="group-items">
+        <view class="record-item card" wx:for="{{item.items}}" wx:for-item="r" wx:key="id">
+          <view class="ri-left">
+            <view class="ri-icon" style="background:{{r.typeColor}}1a;color:{{r.typeColor}}">{{r.typeIcon}}</view>
+            <view class="ri-body">
+              <view class="ri-type">{{r.typeLabel}}</view>
+              <view class="ri-value">{{r.summary}}</view>
+            </view>
+          </view>
+          <view class="ri-actions">
+            <view class="ri-btn edit" bindtap="goEdit" data-id="{{r.id}}" data-type="{{r.editType}}">编辑</view>
+            <view class="ri-btn delete" bindtap="onDelete" data-id="{{r.id}}">删除</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+</view>
