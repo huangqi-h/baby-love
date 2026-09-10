@@ -56,7 +56,15 @@
     <block wx:elif="{{activeType === 'vaccine'}}">
       <view class="form-row">
         <text class="label">疫苗名称</text>
-        <input class="value-input flex-1" placeholder="如：乙肝疫苗、五联疫苗…" value="{{value}}" bindinput="onValueInput" />
+        <picker style="flex:1;text-align:right" bindchange="onVaccineChange" value="{{vaccineIndex}}" range="{{vaccineOptions}}">
+          <view class="picker-value" style="color:#333">
+            {{vaccineIndex >= 0 ? vaccineOptions[vaccineIndex] : '请选择疫苗'}}
+          </view>
+        </picker>
+      </view>
+      <view wx:if="{{vaccineCustom}}" class="form-row">
+        <text class="label">自定义名称</text>
+        <input class="value-input flex-1" style="text-align:left;color:#333" placeholder="输入疫苗名称" value="{{value}}" bindinput="onValueInput" />
       </view>
       <view class="form-row column">
         <text class="label">备注（可选）</text>

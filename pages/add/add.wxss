@@ -31,7 +31,7 @@
 .form-row {
   display: flex;
   align-items: center;
-  padding: 28rpx 0;
+  padding: 32rpx 0;
   border-bottom: 1rpx solid #f3f3f3;
 }
 
@@ -43,12 +43,23 @@
 .label {
   font-size: 30rpx;
   color: #444;
+  margin-right: 24rpx;
+  flex-shrink: 0;
+}
+
+.form-row.column .label {
+  margin-bottom: 16rpx;
+  margin-right: 0;
+}
+
+.form-row.column .label {
   margin-bottom: 12rpx;
 }
 
 .picker-value {
   font-size: 30rpx;
   color: #333;
+  text-align: right;
 }
 
 .value-box {
@@ -64,6 +75,13 @@
   font-weight: 600;
   color: #ff6b81;
   width: 200rpx;
+}
+
+.value-input.flex-1 {
+  flex: 1;
+  width: auto;
+  font-size: 30rpx;
+  font-weight: normal;
 }
 
 .value-unit {

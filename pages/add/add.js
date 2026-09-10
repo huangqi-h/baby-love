@@ -6,6 +6,38 @@ const TYPES = ['measure', 'diary', 'milestone', 'vaccine']
 
 const MEASURE_META = { label: '身高体重', icon: '📏', color: '#4dabf7', unit: '' }
 
+const COMMON_VACCINES = [
+  '卡介苗',
+  '乙肝疫苗(第1剂)',
+  '乙肝疫苗(第2剂)',
+  '乙肝疫苗(第3剂)',
+  '脊灰疫苗(第1剂)',
+  '脊灰疫苗(第2剂)',
+  '脊灰疫苗(第3剂)',
+  '脊灰疫苗(第4剂)',
+  '百白破疫苗(第1剂)',
+  '百白破疫苗(第2剂)',
+  '百白破疫苗(第3剂)',
+  '百白破疫苗(第4剂)',
+  '麻腮风疫苗(第1剂)',
+  '麻腮风疫苗(第2剂)',
+  '乙脑疫苗(第1剂)',
+  '乙脑疫苗(第2剂)',
+  'A群流脑疫苗(第1剂)',
+  'A群流脑疫苗(第2剂)',
+  'A+C群流脑疫苗(第1剂)',
+  'A+C群流脑疫苗(第2剂)',
+  '甲肝疫苗',
+  '白破疫苗',
+  '五联疫苗',
+  '十三价肺炎疫苗',
+  '五价轮状疫苗',
+  '手足口疫苗',
+  '水痘疫苗',
+  '流感疫苗',
+  '其他'
+]
+
 Page({
   data: {
     types: TYPES.map(t => {
@@ -20,12 +52,13 @@ Page({
     unit: 'cm',
     today: '',
     photos: [],
-    // 同时添加身高体重
     heightValue: '',
     weightValue: '',
-    // 编辑模式
     editId: '',
-    isEdit: false
+    isEdit: false,
+    vaccineOptions: COMMON_VACCINES,
+    vaccineIndex: -1,
+    vaccineCustom: false
   },
 
   onLoad(options) {
@@ -57,6 +90,9 @@ Page({
         } else if (r.type === 'vaccine') {
           patch.value = r.value || ''
           patch.note = r.note || ''
+          const idx = COMMON_VACCINES.indexOf(r.value)
+          patch.vaccineIndex = idx >= 0 ? idx : COMMON_VACCINES.length - 1
+          patch.vaccineCustom = idx < 0
         } else {
           patch.note = r.note || ''
         }
@@ -97,6 +133,17 @@ Page({
 
   onWeightInput(e) {
     this.setData({ weightValue: e.detail.value })
+  },
+
+  onVaccineChange(e) {
+    const idx = parseInt(e.detail.value)
+    const name = this.data.vaccineOptions[idx]
+    const isCustom = name === '其他'
+    this.setData({
+      vaccineIndex: idx,
+      vaccineCustom: isCustom,
+      value: isCustom ? '' : name
+    })
   },
 
   onSave() {
