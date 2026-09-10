@@ -11,7 +11,10 @@
       <text wx:for="{{record.measureLines}}" wx:key="*this">{{item}}
 </text>
     </view>
-    <view wx:elif="{{record.note}}" class="detail-note">{{record.note}}</view>
+    <view wx:elif="{{record.vaccineName}}" class="detail-measure">
+      <view style="font-size:40rpx;font-weight:600;color:#333;margin-bottom:12rpx">{{record.vaccineName}}</view>
+      <view wx:if="{{record.note}}" style="font-size:28rpx;color:#666">{{record.note}}</view>
+    </view>
 
     <view wx:if="{{record.photos.length}}" class="detail-photos">
       <image wx:for="{{record.photos}}" wx:key="*this" class="detail-photo" src="{{item}}" mode="aspectFill" bindtap="previewPhoto" data-index="{{index}}" />

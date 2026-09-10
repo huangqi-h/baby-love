@@ -2,7 +2,7 @@ const store = require('../../utils/store.js')
 const util = require('../../utils/util.js')
 const cloud = require('../../utils/cloud.js')
 
-const TYPES = ['measure', 'diary', 'milestone']
+const TYPES = ['measure', 'diary', 'milestone', 'vaccine']
 
 const MEASURE_META = { label: '身高体重', icon: '📏', color: '#4dabf7', unit: '' }
 
@@ -54,6 +54,9 @@ Page({
           patch.unit = meta.unit
           if (r.type === 'height') patch.heightValue = String(r.value)
           if (r.type === 'weight') patch.weightValue = String(r.value)
+        } else if (r.type === 'vaccine') {
+          patch.value = r.value || ''
+          patch.note = r.note || ''
         } else {
           patch.note = r.note || ''
         }
@@ -134,6 +137,34 @@ Page({
         date: date + 'T00:00:00',
         value: { height: h || null, weight: w || null },
         note: '',
+        photos: this.data.photos,
+        createdAt: Date.now()
+      }
+      store.addRecord(babyId, record)
+      this.syncAndBack('已记录')
+    } else if (activeType === 'vaccine') {
+      const v = value.trim()
+      if (!v) {
+        this._saving = false
+        wx.showToast({ title: '请输入疫苗名称', icon: 'none' })
+        return
+      }
+      if (isEdit) {
+        store.updateRecord(babyId, editId, {
+          date: date + 'T00:00:00',
+          value: v,
+          note: note.trim(),
+          photos: this.data.photos
+        })
+        this.syncAndBack('已更新')
+        return
+      }
+      const record = {
+        id: util.genId(),
+        type: 'vaccine',
+        date: date + 'T00:00:00',
+        value: v,
+        note: note.trim(),
         photos: this.data.photos,
         createdAt: Date.now()
       }

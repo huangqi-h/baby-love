@@ -24,19 +24,38 @@ Page({
   data: {
     list: [],
     babyName: '',
-    subscribed: false
+    subscribed: false,
+    customVaccines: [],
+    showPicker: false,
+    pickerDate: '',
+    pickerId: '',
+    pickerName: '',
+    today: ''
   },
   onShow() {
+    const today = util.formatDate(new Date())
+    this.setData({ pickerDate: today, today })
     cloud.autoSync().then(() => this.refresh())
   },
   refresh() {
     const baby = store.getCurrentBaby()
     if (!baby) {
-      this.setData({ list: [], babyName: '' })
+      this.setData({ list: [], babyName: '', customVaccines: [] })
       return
     }
     const done = store.getVaccines(baby.id)
     const today = new Date()
+
+    // 先获取自定义疫苗记录，用于查找实际接种日期
+    const records = store.getRecords(baby.id) || []
+    const customVaccines = records
+      .filter(r => r.type === 'vaccine')
+      .map(r => Object.assign({}, r, {
+        dateText: util.formatDate(r.date),
+        name: r.value || '疫苗'
+      }))
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+
     const list = SCHEDULE.map((item, idx) => {
       const due = new Date(baby.birthday)
       due.setMonth(due.getMonth() + item.age)
@@ -45,20 +64,82 @@ Page({
       if (diffDay > 0) status = 'overdue'
       else if (diffDay >= -14) status = 'soon'
       const isDone = done.indexOf(String(idx)) >= 0
+
+      // 查找该计划疫苗的最新实际接种记录
+      const matched = customVaccines.filter(r => r.name === item.name)
+      const latestRecord = matched.length ? matched[0] : null
+
       return Object.assign({}, item, {
         id: String(idx),
-        dueText: util.formatDate(due),
-        status,
+        dueText: isDone && latestRecord ? `${latestRecord.dateText} 已接种` : util.formatDate(due),
+        status: isDone ? 'done' : status,
         isDone,
-        diffText: diffDay > 0 ? `已逾期 ${diffDay} 天` : (diffDay === 0 ? '今天到期' : `还有 ${-diffDay} 天`)
+        diffText: isDone ? '' : (diffDay > 0 ? `已逾期 ${diffDay} 天` : (diffDay === 0 ? '今天到期' : `还有 ${-diffDay} 天`))
       })
     })
-    this.setData({ list, babyName: baby.name })
+
+    this.setData({ list, babyName: baby.name, customVaccines })
   },
-  toggle(e) {
+  onTapItem(e) {
+    const id = e.currentTarget.dataset.id
+    const item = this.data.list.find(i => i.id === id)
+    if (!item) return
+    if (item.isDone) {
+      // 已完成 → 取消完成
+      this.toggleDone(id)
+      return
+    }
+    // 未完成 → 弹出日期选择
+    this.setData({
+      showPicker: true,
+      pickerId: id,
+      pickerName: item.name,
+      pickerDate: util.formatDate(new Date())
+    })
+  },
+  onPickerChange(e) {
+    this.setData({ pickerDate: e.detail.value })
+  },
+  onPickerCancel() {
+    this.setData({ showPicker: false, pickerId: '', pickerName: '' })
+  },
+  onPickerConfirm() {
+    if (this._saving) return
+    this._saving = true
+    const { pickerId, pickerName, pickerDate } = this.data
+    const baby = store.getCurrentBaby()
+    const babyId = baby ? baby.id : ''
+
+    // 1. 标记计划完成
+    store.toggleVaccine(babyId, pickerId)
+
+    // 2. 添加疫苗记录
+    const record = {
+      id: util.genId(),
+      type: 'vaccine',
+      date: pickerDate + 'T00:00:00',
+      value: pickerName,
+      note: '',
+      photos: [],
+      createdAt: Date.now()
+    }
+    store.addRecord(babyId, record)
+
+    // 3. 同步
+    if (store.getShareId() && cloud.CLOUD_ENABLED) {
+      cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
+    } else if (cloud.CLOUD_ENABLED) {
+      cloud.upload(store.exportAll()).catch(() => {})
+    }
+
+    this.setData({ showPicker: false, pickerId: '', pickerName: '' })
+    this._saving = false
+    this.refresh()
+    wx.showToast({ title: '已记录接种', icon: 'success' })
+  },
+  toggleDone(id) {
     if (this._toggling) return
     this._toggling = true
-    const id = e.currentTarget.dataset.id
     const baby = store.getCurrentBaby()
     store.toggleVaccine(baby.id, id)
     this.refresh()
@@ -88,5 +169,11 @@ Page({
       },
       fail: () => wx.showToast({ title: '授权失败', icon: 'none' })
     })
-  }
+  },
+
+  goDetail(e) {
+    const id = e.currentTarget.dataset.id
+    wx.navigateTo({ url: `/pages/detail/detail?id=${id}` })
+  },
+  noop() {}
 })

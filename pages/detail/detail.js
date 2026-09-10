@@ -37,6 +37,7 @@ Page({
       dateText: util.formatDate(r.date),
       measureText,
       measureLines: measureText ? measureText.split('\n') : [],
+      vaccineName: r.type === 'vaccine' ? (r.value || '') : '',
       isMeasure: r.type === 'measure' || r.type === 'height' || r.type === 'weight',
       photos: r.photos || []
     })

@@ -52,6 +52,18 @@
       </block>
     </block>
 
+    <!-- 疫苗输入 -->
+    <block wx:elif="{{activeType === 'vaccine'}}">
+      <view class="form-row">
+        <text class="label">疫苗名称</text>
+        <input class="value-input flex-1" placeholder="如：乙肝疫苗、五联疫苗…" value="{{value}}" bindinput="onValueInput" />
+      </view>
+      <view class="form-row column">
+        <text class="label">备注（可选）</text>
+        <textarea class="note-input" placeholder="记录批号、接种部位等…" value="{{note}}" bindinput="onNoteInput" maxlength="500" />
+      </view>
+    </block>
+
     <!-- 日记/里程碑：文本输入 -->
     <view wx:else class="form-row column">
       <text class="label">{{activeType === 'milestone' ? '发生了什么' : '今天想说'}}</text>

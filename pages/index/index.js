@@ -77,6 +77,8 @@ Page({
         summary = parts.join(' / ')
       } else if (r.type === 'height' || r.type === 'weight') {
         summary = `${r.value}${meta.unit}`
+      } else if (r.type === 'vaccine') {
+        summary = r.value || meta.label
       } else {
         summary = r.note || meta.label
       }
