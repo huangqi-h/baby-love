@@ -39,8 +39,11 @@ Page({
     return `${y}-${m}-${day} ${hh}:${mm}`
   },
   onSave() {
+    if (this._saving) return
+    this._saving = true
     const babyId = store.getCurrentId()
     if (!babyId) {
+      this._saving = false
       wx.showToast({ title: '请先添加宝宝', icon: 'none' })
       return
     }
@@ -58,15 +61,19 @@ Page({
     if (store.getShareId() && cloud.CLOUD_ENABLED) {
       cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
     }
+    this._saving = false
     this.setData({ amount: '', duration: '' })
     this.refresh()
   },
   onDelete(e) {
+    if (this._deleting) return
+    this._deleting = true
     const id = e.currentTarget.dataset.id
     store.deleteFeed(store.getCurrentId(), id)
     if (store.getShareId() && cloud.CLOUD_ENABLED) {
       cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
     }
+    this._deleting = false
     this.refresh()
   },
   refresh() {

@@ -178,15 +178,22 @@ Page({
   },
 
   markVaccine(e) {
+    if (this._marking) return
+    this._marking = true
     const id = e.currentTarget.dataset.id
     const baby = store.getCurrentBaby()
-    if (!baby || store.getVaccines(baby.id).indexOf(id) >= 0) return
+    if (!baby || store.getVaccines(baby.id).indexOf(id) >= 0) {
+      this._marking = false
+      return
+    }
     store.toggleVaccine(baby.id, id)
     this.setData({ upcomingVaccines: this.computeVaccines() })
     if (store.getShareId() && cloud.CLOUD_ENABLED) {
-      cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
+      cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {}).then(() => { this._marking = false })
     } else if (cloud.CLOUD_ENABLED) {
-      cloud.upload(store.exportAll()).catch(() => {})
+      cloud.upload(store.exportAll()).catch(() => {}).then(() => { this._marking = false })
+    } else {
+      this._marking = false
     }
     wx.showToast({ title: '已标记完成', icon: 'success' })
   },

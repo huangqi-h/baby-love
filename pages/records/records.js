@@ -65,12 +65,15 @@ Page({
   },
 
   onDelete(e) {
+    if (this._deleting) return
+    this._deleting = true
     const id = e.currentTarget.dataset.id
     wx.showModal({
       title: '删除记录',
       content: '确定要删除这条记录吗？',
       confirmColor: '#ff6b81',
       success: (res) => {
+        this._deleting = false
         if (res.confirm) {
           const babyId = store.getCurrentId()
           store.deleteRecord(babyId, id)
@@ -80,7 +83,8 @@ Page({
           this.load()
           wx.showToast({ title: '已删除', icon: 'success' })
         }
-      }
+      },
+      fail: () => { this._deleting = false }
     })
   }
 })

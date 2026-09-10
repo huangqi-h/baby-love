@@ -66,12 +66,16 @@ Page({
     })
   },
   onSave() {
+    if (this._saving) return
+    this._saving = true
     const { name, gender, birthday, avatar, editId } = this.data
     if (!name.trim()) {
+      this._saving = false
       wx.showToast({ title: '请填写宝宝名字', icon: 'none' })
       return
     }
     if (!birthday) {
+      this._saving = false
       wx.showToast({ title: '请选择出生日期', icon: 'none' })
       return
     }
@@ -84,6 +88,7 @@ Page({
     if (store.getShareId() && cloud.CLOUD_ENABLED) {
       cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
     }
+    this._saving = false
     wx.showToast({ title: '已保存', icon: 'success' })
     setTimeout(() => wx.navigateBack(), 500)
   }

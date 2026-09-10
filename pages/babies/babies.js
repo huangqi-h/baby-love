@@ -39,6 +39,8 @@ Page({
     })
   },
   deleteBaby(e) {
+    if (this._deleting) return
+    this._deleting = true
     const id = e.currentTarget.dataset.id
     const baby = store.getBabyById(id)
     wx.showModal({
@@ -46,6 +48,7 @@ Page({
       content: `确定删除「${baby.name}」及其全部数据吗？`,
       confirmColor: '#ff6b81',
       success: (res) => {
+        this._deleting = false
         if (res.confirm) {
           store.deleteBaby(id)
           this.setData({ babies: store.getBabies(), currentId: store.getCurrentId() })
@@ -53,7 +56,8 @@ Page({
             cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
           }
         }
-      }
+      },
+      fail: () => { this._deleting = false }
     })
   }
 })

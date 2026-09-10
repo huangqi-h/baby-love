@@ -56,14 +56,18 @@ Page({
     this.setData({ list, babyName: baby.name })
   },
   toggle(e) {
+    if (this._toggling) return
+    this._toggling = true
     const id = e.currentTarget.dataset.id
     const baby = store.getCurrentBaby()
     store.toggleVaccine(baby.id, id)
     this.refresh()
     if (store.getShareId() && cloud.CLOUD_ENABLED) {
-      cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
+      cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {}).then(() => { this._toggling = false })
     } else if (cloud.CLOUD_ENABLED) {
-      cloud.upload(store.exportAll()).catch(() => {})
+      cloud.upload(store.exportAll()).catch(() => {}).then(() => { this._toggling = false })
+    } else {
+      this._toggling = false
     }
   },
   onSubscribe() {

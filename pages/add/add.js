@@ -97,8 +97,11 @@ Page({
   },
 
   onSave() {
+    if (this._saving) return
+    this._saving = true
     const babyId = store.getCurrentId()
     if (!babyId) {
+      this._saving = false
       wx.showToast({ title: '请先添加宝宝', icon: 'none' })
       return
     }
@@ -109,6 +112,7 @@ Page({
       const h = parseFloat(heightValue)
       const w = parseFloat(weightValue)
       if ((!h || h <= 0) && (!w || w <= 0)) {
+        this._saving = false
         wx.showToast({ title: '请至少输入身高或体重', icon: 'none' })
         return
       }
@@ -138,6 +142,7 @@ Page({
     } else {
       // 日记/里程碑
       if (!note.trim()) {
+        this._saving = false
         wx.showToast({ title: '请输入内容', icon: 'none' })
         return
       }
@@ -172,6 +177,7 @@ Page({
       return Promise.resolve()
     }
     doSync().catch(() => {}).then(() => {
+      this._saving = false
       wx.showToast({ title, icon: 'success' })
       setTimeout(() => wx.navigateBack(), 400)
     })

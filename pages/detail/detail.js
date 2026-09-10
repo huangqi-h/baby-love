@@ -63,11 +63,14 @@ Page({
   },
 
   onDelete() {
+    if (this._deleting) return
+    this._deleting = true
     wx.showModal({
       title: '删除记录',
       content: '确定要删除这条记录吗？',
       confirmColor: '#ff6b81',
       success: (res) => {
+        this._deleting = false
         if (res.confirm) {
           store.deleteRecord(this.babyId, this.data.record.id)
           if (store.getShareId() && cloud.CLOUD_ENABLED) {
@@ -76,7 +79,8 @@ Page({
           wx.showToast({ title: '已删除', icon: 'success' })
           setTimeout(() => wx.navigateBack(), 500)
         }
-      }
+      },
+      fail: () => { this._deleting = false }
     })
   }
 })

@@ -14,6 +14,8 @@ Page({
     })
   },
   onImport() {
+    if (this._importing) return
+    this._importing = true
     wx.getClipboardData({
       success: (res) => {
         try {
@@ -27,26 +29,41 @@ Page({
         } catch (e) {
           wx.showToast({ title: '解析失败，请检查剪贴板', icon: 'none' })
         }
-      }
+        this._importing = false
+      },
+      fail: () => { this._importing = false }
     })
   },
   onCloudUpload() {
+    if (this._uploading) return
+    this._uploading = true
     if (!cloud.CLOUD_ENABLED) {
+      this._uploading = false
       wx.showToast({ title: '未开启云同步', icon: 'none' })
       return
     }
     const data = store.exportAll()
     cloud.upload(data)
-      .then(() => wx.showToast({ title: '云备份成功', icon: 'success' }))
-      .catch(() => wx.showToast({ title: '云备份失败', icon: 'none' }))
+      .then(() => {
+        this._uploading = false
+        wx.showToast({ title: '云备份成功', icon: 'success' })
+      })
+      .catch(() => {
+        this._uploading = false
+        wx.showToast({ title: '云备份失败', icon: 'none' })
+      })
   },
   onCloudDownload() {
+    if (this._downloading) return
+    this._downloading = true
     if (!cloud.CLOUD_ENABLED) {
+      this._downloading = false
       wx.showToast({ title: '未开启云同步', icon: 'none' })
       return
     }
     cloud.download()
       .then(payload => {
+        this._downloading = false
         if (payload && store.importAll(payload)) {
           this.setData({ status: '已从云端恢复' })
           wx.showToast({ title: '恢复成功', icon: 'success' })
@@ -54,6 +71,9 @@ Page({
           wx.showToast({ title: '云端暂无数据', icon: 'none' })
         }
       })
-      .catch(() => wx.showToast({ title: '恢复失败', icon: 'none' }))
+      .catch(() => {
+        this._downloading = false
+        wx.showToast({ title: '恢复失败', icon: 'none' })
+      })
   }
 })

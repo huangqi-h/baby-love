@@ -41,7 +41,10 @@ Page({
   goBackup() { wx.navigateTo({ url: '/pages/backup/backup' }) },
 
   createShare() {
+    if (this._sharing) return
+    this._sharing = true
     if (!cloud.CLOUD_ENABLED) {
+      this._sharing = false
       wx.showToast({ title: '请先开通云开发', icon: 'none' })
       return
     }
@@ -49,6 +52,7 @@ Page({
     cloud.createShare(store.exportAll())
       .then(res => {
         wx.hideLoading()
+        this._sharing = false
         if (res.error) {
           wx.showToast({ title: res.error, icon: 'none' })
           return
@@ -63,6 +67,7 @@ Page({
       })
       .catch(err => {
         wx.hideLoading()
+        this._sharing = false
         wx.showToast({ title: err.message || '创建失败', icon: 'none' })
       })
   },
@@ -79,7 +84,10 @@ Page({
   },
 
   doJoin(code) {
+    if (this._joining) return
+    this._joining = true
     if (!cloud.CLOUD_ENABLED) {
+      this._joining = false
       wx.showToast({ title: '请先开通云开发', icon: 'none' })
       return
     }
@@ -87,6 +95,7 @@ Page({
     cloud.joinShare(code)
       .then(res => {
         wx.hideLoading()
+        this._joining = false
         if (res.error) {
           wx.showToast({ title: res.error, icon: 'none' })
           return
@@ -99,14 +108,21 @@ Page({
       })
       .catch(err => {
         wx.hideLoading()
+        this._joining = false
         wx.showToast({ title: err.message || '加入失败', icon: 'none' })
       })
   },
 
   syncNow() {
+    if (this._syncing) return
+    this._syncing = true
     const shareId = store.getShareId()
-    if (!shareId) return
+    if (!shareId) {
+      this._syncing = false
+      return
+    }
     if (!cloud.CLOUD_ENABLED) {
+      this._syncing = false
       wx.showToast({ title: '请先开通云开发', icon: 'none' })
       return
     }
@@ -114,6 +130,7 @@ Page({
     cloud.syncShare(shareId, store.exportAll())
       .then(res => {
         wx.hideLoading()
+        this._syncing = false
         if (res.error) {
           wx.showToast({ title: res.error, icon: 'none' })
           return
@@ -126,6 +143,7 @@ Page({
       })
       .catch(err => {
         wx.hideLoading()
+        this._syncing = false
         wx.showToast({ title: err.message || '同步失败', icon: 'none' })
       })
   },
