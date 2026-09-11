@@ -3,6 +3,10 @@ const CLOUD_ENV = 'cloudbase-d6gw9cp23f1d12a6b'
 const CLOUD_ENABLED = true
 
 let cloudInited = false
+let lastAutoSync = 0
+let lastSyncAll = 0
+const AUTO_SYNC_INTERVAL = 30 * 1000 // 页面自动同步最小间隔 30 秒
+const SYNC_ALL_INTERVAL = 5 * 1000   // 操作同步最小间隔 5 秒
 
 function ensureCloud() {
   if (!CLOUD_ENABLED || !CLOUD_ENV) return false
@@ -69,7 +73,12 @@ function syncShare(shareId, payload) {
 }
 
 // 自动同步：有 shareId 时拉取家庭共享数据，无 shareId 时从个人备份恢复
+// 增加 30 秒节流，避免页面频繁 onShow 导致调用次数过高
 function autoSync() {
+  const now = Date.now()
+  if (now - lastAutoSync < AUTO_SYNC_INTERVAL) return Promise.resolve(false)
+  lastAutoSync = now
+
   const store = require('./store.js')
   const shareId = store.getShareId()
   if (!ensureCloud()) return Promise.resolve(false)
@@ -97,7 +106,12 @@ function autoSync() {
 }
 
 // 统一同步：无论有无家庭共享，都先 upload 个人备份；有 shareId 时再 syncShare
+// 增加 5 秒节流，避免用户连续操作时频繁调用
 function syncAll() {
+  const now = Date.now()
+  if (now - lastSyncAll < SYNC_ALL_INTERVAL) return Promise.resolve(false)
+  lastSyncAll = now
+
   const store = require('./store.js')
   const payload = store.exportAll()
   if (!ensureCloud()) return Promise.resolve(false)
