@@ -61,6 +61,10 @@
       <view class="qi-icon" style="background:#f0e8ff;color:#9775fa">🖼️</view>
       <text class="qi-text">成长相册</text>
     </view>
+    <view class="quick-item" bindtap="goTodo">
+      <view class="qi-icon" style="background:#fff3e0;color:#ff922b">✅</view>
+      <text class="qi-text">待办事项</text>
+    </view>
   </view>
 
   <!-- 近期待办疫苗 -->
@@ -74,6 +78,21 @@
       <view class="vac-right">
         <text class="vac-tag {{item.status}}">{{item.status === 'overdue' ? '逾期' : '临近'}} · {{item.diffText}}</text>
         <view class="vac-done" catchtap="markVaccine" data-id="{{item.id}}">✓</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 近期待办 -->
+  <view wx:if="{{upcomingTodos.length}}" class="todo-card" bindtap="goTodo">
+    <view class="todo-head">
+      <text class="todo-title">✅ 待办事项</text>
+      <text class="todo-more">查看全部 ›</text>
+    </view>
+    <view class="todo-item" wx:for="{{upcomingTodos}}" wx:key="id">
+      <text class="todo-name">{{item.title}}</text>
+      <view class="todo-right">
+        <text wx:if="{{item.notePreview}}" class="todo-note">{{item.notePreview}}</text>
+        <view class="todo-done" catchtap="toggleTodo" data-id="{{item.id}}">✓</view>
       </view>
     </view>
   </view>

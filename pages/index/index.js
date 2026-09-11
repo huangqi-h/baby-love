@@ -29,6 +29,7 @@ Page({
     babies: [],
     showSwitcher: false,
     upcomingVaccines: [],
+    upcomingTodos: [],
     pageSize: 10,
     hasMore: false
   },
@@ -62,7 +63,8 @@ Page({
       babies: (store.getBabies() || []).map(b => Object.assign({}, b, {
         isImgAvatar: b.avatar && (b.avatar.startsWith('wxfile://') || b.avatar.startsWith('http') || b.avatar.startsWith('cloud://') || b.avatar.startsWith('/'))
       })),
-      upcomingVaccines: this.computeVaccines()
+      upcomingVaccines: this.computeVaccines(),
+      upcomingTodos: this.computeTodos()
     })
   },
 
@@ -128,6 +130,18 @@ Page({
     }).filter(Boolean)
   },
 
+  computeTodos() {
+    const babyId = store.getCurrentId()
+    if (!babyId) return []
+    return store.getTodos(babyId)
+      .filter(t => !t.done)
+      .sort((a, b) => b.createdAt - a.createdAt)
+      .slice(0, 3)
+      .map(t => Object.assign({}, t, {
+        notePreview: t.note ? (t.note.length > 16 ? t.note.slice(0, 16) + '…' : t.note) : ''
+      }))
+  },
+
   noop() {},
 
   toggleSwitcher() {
@@ -177,6 +191,26 @@ Page({
 
   goAlbum() {
     wx.navigateTo({ url: '/pages/album/album' })
+  },
+
+  goTodo() {
+    wx.navigateTo({ url: '/pages/todo/todo' })
+  },
+
+  toggleTodo(e) {
+    if (this._toggling) return
+    this._toggling = true
+    const id = e.currentTarget.dataset.id
+    const babyId = store.getCurrentId()
+    const item = store.getTodos(babyId).find(t => t.id === id)
+    if (item) {
+      store.updateTodo(babyId, id, { done: !item.done })
+      if (store.getShareId() && cloud.CLOUD_ENABLED) {
+        cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
+      }
+    }
+    this._toggling = false
+    this.setData({ upcomingTodos: this.computeTodos() })
   },
 
   markVaccine(e) {

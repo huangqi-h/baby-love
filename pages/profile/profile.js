@@ -38,6 +38,7 @@ Page({
   goBabies() { wx.navigateTo({ url: '/pages/babies/babies' }) },
   goVaccine() { wx.navigateTo({ url: '/pages/vaccine/vaccine' }) },
   goFeed() { wx.navigateTo({ url: '/pages/feed/feed' }) },
+  goTodo() { wx.navigateTo({ url: '/pages/todo/todo' }) },
   goBackup() { wx.navigateTo({ url: '/pages/backup/backup' }) },
 
   createShare() {

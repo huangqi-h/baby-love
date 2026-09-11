@@ -22,6 +22,9 @@
     <view class="menu-item" bindtap="goFeed">
       <text class="mi-icon">🍼</text><text class="mi-text">喂养记录</text><text class="mi-arrow">›</text>
     </view>
+    <view class="menu-item" bindtap="goTodo">
+      <text class="mi-icon">✅</text><text class="mi-text">待办事项</text><text class="mi-arrow">›</text>
+    </view>
     <view class="menu-item" bindtap="goBackup">
       <text class="mi-icon">☁️</text><text class="mi-text">数据备份</text><text class="mi-arrow">›</text>
     </view>

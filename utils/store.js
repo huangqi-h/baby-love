@@ -5,6 +5,7 @@ const CURRENT_KEY = 'currentBabyId'
 const RECORDS_KEY = 'records'
 const VACCINE_KEY = 'vaccines'
 const FEED_KEY = 'feeds'
+const TODO_KEY = 'todos'
 const SHARE_KEY = 'shareId'
 
 /* ---------- 宝宝 ---------- */
@@ -40,6 +41,9 @@ function deleteBaby(id) {
   const feed = wx.getStorageSync(FEED_KEY) || {}
   delete feed[id]
   wx.setStorageSync(FEED_KEY, feed)
+  const todo = wx.getStorageSync(TODO_KEY) || {}
+  delete todo[id]
+  wx.setStorageSync(TODO_KEY, todo)
   if (getCurrentId() === id) setCurrentId(list[0] ? list[0].id : '')
   return list
 }
@@ -94,6 +98,37 @@ function toggleVaccine(babyId, itemId) {
   return list
 }
 
+/* ---------- 待办 ---------- */
+function getTodos(babyId) {
+  const all = wx.getStorageSync(TODO_KEY) || {}
+  return all[babyId] || []
+}
+
+function saveTodos(babyId, todos) {
+  const all = wx.getStorageSync(TODO_KEY) || {}
+  all[babyId] = todos
+  wx.setStorageSync(TODO_KEY, all)
+}
+
+function addTodo(babyId, todo) {
+  const todos = getTodos(babyId)
+  todos.unshift(todo)
+  saveTodos(babyId, todos)
+  return todos
+}
+
+function deleteTodo(babyId, id) {
+  const todos = getTodos(babyId).filter(t => t.id !== id)
+  saveTodos(babyId, todos)
+  return todos
+}
+
+function updateTodo(babyId, id, patch) {
+  const todos = getTodos(babyId).map(t => t.id === id ? Object.assign({}, t, patch) : t)
+  saveTodos(babyId, todos)
+  return todos
+}
+
 /* ---------- 喂养 ---------- */
 function getFeeds(babyId) {
   const all = wx.getStorageSync(FEED_KEY) || {}
@@ -127,7 +162,8 @@ function exportAll() {
     currentBabyId: getCurrentId(),
     records: wx.getStorageSync(RECORDS_KEY) || {},
     vaccines: wx.getStorageSync(VACCINE_KEY) || {},
-    feeds: wx.getStorageSync(FEED_KEY) || {}
+    feeds: wx.getStorageSync(FEED_KEY) || {},
+    todos: wx.getStorageSync(TODO_KEY) || {}
   }
 }
 
@@ -138,6 +174,7 @@ function importAll(data) {
   wx.setStorageSync(RECORDS_KEY, data.records || {})
   wx.setStorageSync(VACCINE_KEY, data.vaccines || {})
   wx.setStorageSync(FEED_KEY, data.feeds || {})
+  wx.setStorageSync(TODO_KEY, data.todos || {})
   return true
 }
 
@@ -151,6 +188,7 @@ module.exports = {
   getRecords, saveRecords, addRecord, deleteRecord, getRecordById, updateRecord,
   getVaccines, toggleVaccine,
   getFeeds, saveFeeds, addFeed, deleteFeed,
+  getTodos, saveTodos, addTodo, deleteTodo, updateTodo,
   exportAll, importAll,
   getShareId, setShareId, clearShareId
 }

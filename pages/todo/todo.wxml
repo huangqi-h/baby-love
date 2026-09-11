@@ -1,0 +1,33 @@
+<view class="container">
+
+  <view wx:if="{{!todos.length}}" class="empty-box">
+    <view class="empty-emoji">✅</view>
+    <view class="empty-text">还没有待办事项</view>
+  </view>
+
+  <view wx:else class="todo-list">
+    <view class="todo-item card {{item.doneClass}}" wx:for="{{todos}}" wx:key="id">
+      <view class="todo-check" bindtap="onToggle" data-id="{{item.id}}">
+        <view class="check-box {{item.done ? 'checked' : ''}}">
+          <text wx:if="{{item.done}}" class="check-tick">✓</text>
+        </view>
+      </view>
+      <view class="todo-body" bindtap="onEdit" data-id="{{item.id}}">
+        <view class="todo-title">{{item.title}}</view>
+        <view wx:if="{{item.note}}" class="todo-note">{{item.note}}</view>
+      </view>
+      <view class="todo-del" bindtap="onDelete" data-id="{{item.id}}">删除</view>
+    </view>
+  </view>
+
+  <view class="add-bar card">
+    <view wx:if="{{editingId}}" class="edit-hint">
+      <text>正在编辑…</text>
+      <text class="cancel-btn" bindtap="onCancelEdit">取消</text>
+    </view>
+    <input class="title-input" placeholder="{{editingId ? '修改待办内容' : '输入待办事项…'}}" value="{{title}}" bindinput="onTitleInput" />
+    <input class="note-input" placeholder="添加备注（可选）" value="{{note}}" bindinput="onNoteInput" />
+    <button class="btn-primary add-btn" bindtap="onAdd">{{editingId ? '保存修改' : '添加待办'}}</button>
+  </view>
+
+</view>

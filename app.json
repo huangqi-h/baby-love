@@ -9,13 +9,14 @@
     "pages/baby-form/baby-form",
     "pages/vaccine/vaccine",
     "pages/feed/feed",
+    "pages/todo/todo",
     "pages/backup/backup",
     "pages/album/album",
     "pages/records/records"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ff9a9e",
-    "navigationBarTitleText": "宝宝成长记",
+    "navigationBarTitleText": "新手妈妈在此",
     "navigationBarTextStyle": "white",
     "backgroundColor": "#fff5f5"
   },

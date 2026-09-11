@@ -1,0 +1,134 @@
+.empty-box {
+  text-align: center;
+  padding: 120rpx 0;
+}
+
+.empty-emoji {
+  font-size: 80rpx;
+}
+
+.empty-text {
+  margin-top: 16rpx;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.todo-list {
+  margin-bottom: 320rpx;
+}
+
+.todo-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 24rpx 28rpx;
+  margin-bottom: 16rpx;
+}
+
+.todo-check {
+  margin-right: 20rpx;
+  margin-top: 4rpx;
+  min-width: 48rpx;
+}
+
+.check-box {
+  width: 40rpx;
+  height: 40rpx;
+  border: 2rpx solid #ff9a9e;
+  border-radius: 10rpx;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.check-box.checked {
+  background: #ff9a9e;
+  border-color: #ff9a9e;
+}
+
+.check-tick {
+  color: #fff;
+  font-size: 26rpx;
+  font-weight: bold;
+}
+
+.todo-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.todo-title {
+  font-size: 30rpx;
+  color: #333;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+.todo-note {
+  margin-top: 8rpx;
+  font-size: 26rpx;
+  color: #999;
+  line-height: 1.4;
+  word-break: break-all;
+}
+
+.todo-done .todo-title {
+  text-decoration: line-through;
+  color: #bbb;
+}
+
+.todo-done .todo-note {
+  color: #ccc;
+}
+
+.todo-del {
+  font-size: 26rpx;
+  color: #ccc;
+  margin-left: 16rpx;
+  margin-top: 4rpx;
+  min-width: 52rpx;
+}
+
+.add-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 24rpx 32rpx 48rpx;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.06);
+  z-index: 10;
+}
+
+.edit-hint {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 26rpx;
+  color: #ff6b81;
+  margin-bottom: 16rpx;
+}
+
+.cancel-btn {
+  color: #999;
+}
+
+.title-input {
+  height: 72rpx;
+  font-size: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  margin-bottom: 16rpx;
+}
+
+.note-input {
+  height: 64rpx;
+  font-size: 28rpx;
+  color: #666;
+  border-bottom: 1rpx solid #f0f0f0;
+  margin-bottom: 20rpx;
+}
+
+.add-btn {
+  width: 100%;
+}

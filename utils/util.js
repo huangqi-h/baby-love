@@ -42,7 +42,8 @@ const TYPE_META = {
   measure: { label: '身高体重', unit: '', icon: '📏', color: '#4dabf7' },
   diary: { label: '日记', unit: '', icon: '📝', color: '#9775fa' },
   milestone: { label: '里程碑', unit: '', icon: '🌟', color: '#ff6b81' },
-  vaccine: { label: '疫苗', unit: '', icon: '💉', color: '#51cf66' }
+  vaccine: { label: '疫苗', unit: '', icon: '💉', color: '#51cf66' },
+  todo: { label: '待办', unit: '', icon: '✅', color: '#ff9a9e' }
 }
 
 function typeMeta(type) {
