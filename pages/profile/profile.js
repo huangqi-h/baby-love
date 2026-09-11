@@ -128,18 +128,10 @@ Page({
       return
     }
     wx.showLoading({ title: '同步中…' })
-    cloud.syncShare(shareId, store.exportAll())
-      .then(res => {
+    cloud.syncAll()
+      .then(() => {
         wx.hideLoading()
         this._syncing = false
-        if (res.error) {
-          wx.showToast({ title: res.error, icon: 'none' })
-          return
-        }
-        if (res.payload) {
-          store.importAll(res.payload)
-          this.onShow()
-        }
         wx.showToast({ title: '同步成功', icon: 'success' })
       })
       .catch(err => {

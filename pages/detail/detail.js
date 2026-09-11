@@ -74,8 +74,8 @@ Page({
         this._deleting = false
         if (res.confirm) {
           store.deleteRecord(this.babyId, this.data.record.id)
-          if (store.getShareId() && cloud.CLOUD_ENABLED) {
-            cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
+          if (cloud.CLOUD_ENABLED) {
+            cloud.syncAll().catch(() => {})
           }
           wx.showToast({ title: '已删除', icon: 'success' })
           setTimeout(() => wx.navigateBack(), 500)

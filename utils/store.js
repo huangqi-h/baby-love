@@ -163,7 +163,8 @@ function exportAll() {
     records: wx.getStorageSync(RECORDS_KEY) || {},
     vaccines: wx.getStorageSync(VACCINE_KEY) || {},
     feeds: wx.getStorageSync(FEED_KEY) || {},
-    todos: wx.getStorageSync(TODO_KEY) || {}
+    todos: wx.getStorageSync(TODO_KEY) || {},
+    shareId: getShareId()
   }
 }
 
@@ -175,6 +176,7 @@ function importAll(data) {
   wx.setStorageSync(VACCINE_KEY, data.vaccines || {})
   wx.setStorageSync(FEED_KEY, data.feeds || {})
   wx.setStorageSync(TODO_KEY, data.todos || {})
+  if (data.shareId) setShareId(data.shareId)
   return true
 }
 

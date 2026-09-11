@@ -85,8 +85,8 @@ Page({
     } else {
       store.addBaby(data)
     }
-    if (store.getShareId() && cloud.CLOUD_ENABLED) {
-      cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
+    if (cloud.CLOUD_ENABLED) {
+      cloud.syncAll().catch(() => {})
     }
     this._saving = false
     wx.showToast({ title: '已保存', icon: 'success' })

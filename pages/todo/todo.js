@@ -59,8 +59,8 @@ Page({
         createdAt: Date.now()
       })
     }
-    if (store.getShareId() && cloud.CLOUD_ENABLED) {
-      cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
+    if (cloud.CLOUD_ENABLED) {
+      cloud.syncAll().catch(() => {})
     }
     this._saving = false
     this.setData({ title: '', note: '', editingId: '' })
@@ -74,8 +74,8 @@ Page({
     const item = store.getTodos(babyId).find(t => t.id === id)
     if (item) {
       store.updateTodo(babyId, id, { done: !item.done })
-      if (store.getShareId() && cloud.CLOUD_ENABLED) {
-        cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
+      if (cloud.CLOUD_ENABLED) {
+        cloud.syncAll().catch(() => {})
       }
     }
     this._toggling = false
@@ -97,8 +97,8 @@ Page({
     this._deleting = true
     const id = e.currentTarget.dataset.id
     store.deleteTodo(store.getCurrentId(), id)
-    if (store.getShareId() && cloud.CLOUD_ENABLED) {
-      cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
+    if (cloud.CLOUD_ENABLED) {
+      cloud.syncAll().catch(() => {})
     }
     this._deleting = false
     this.refresh()

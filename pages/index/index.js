@@ -205,8 +205,8 @@ Page({
     const item = store.getTodos(babyId).find(t => t.id === id)
     if (item) {
       store.updateTodo(babyId, id, { done: !item.done })
-      if (store.getShareId() && cloud.CLOUD_ENABLED) {
-        cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
+      if (cloud.CLOUD_ENABLED) {
+        cloud.syncAll().catch(() => {})
       }
     }
     this._toggling = false
@@ -224,10 +224,8 @@ Page({
     }
     store.toggleVaccine(baby.id, id)
     this.setData({ upcomingVaccines: this.computeVaccines() })
-    if (store.getShareId() && cloud.CLOUD_ENABLED) {
-      cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {}).then(() => { this._marking = false })
-    } else if (cloud.CLOUD_ENABLED) {
-      cloud.upload(store.exportAll()).catch(() => {}).then(() => { this._marking = false })
+    if (cloud.CLOUD_ENABLED) {
+      cloud.syncAll().catch(() => {}).then(() => { this._marking = false })
     } else {
       this._marking = false
     }

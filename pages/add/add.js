@@ -249,8 +249,8 @@ Page({
 
   syncAndBack(title) {
     const doSync = () => {
-      if (store.getShareId() && cloud.CLOUD_ENABLED) {
-        return cloud.syncShare(store.getShareId(), store.exportAll())
+      if (cloud.CLOUD_ENABLED) {
+        return cloud.syncAll()
       }
       return Promise.resolve()
     }

@@ -305,8 +305,8 @@ Page({
         if (res.confirm) {
           const babyId = store.getCurrentId()
           store.deleteRecord(babyId, id)
-          if (store.getShareId() && cloud.CLOUD_ENABLED) {
-            cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
+          if (cloud.CLOUD_ENABLED) {
+            cloud.syncAll().catch(() => {})
           }
           this.loadList()
           wx.showToast({ title: '已删除', icon: 'success' })

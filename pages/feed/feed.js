@@ -58,8 +58,8 @@ Page({
       duration: activeType === 'breast' ? (Number(duration) || 0) : 0
     }
     store.addFeed(babyId, feed)
-    if (store.getShareId() && cloud.CLOUD_ENABLED) {
-      cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
+    if (cloud.CLOUD_ENABLED) {
+      cloud.syncAll().catch(() => {})
     }
     this._saving = false
     this.setData({ amount: '', duration: '' })
@@ -70,8 +70,8 @@ Page({
     this._deleting = true
     const id = e.currentTarget.dataset.id
     store.deleteFeed(store.getCurrentId(), id)
-    if (store.getShareId() && cloud.CLOUD_ENABLED) {
-      cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
+    if (cloud.CLOUD_ENABLED) {
+      cloud.syncAll().catch(() => {})
     }
     this._deleting = false
     this.refresh()

@@ -126,10 +126,8 @@ Page({
     store.addRecord(babyId, record)
 
     // 3. 同步
-    if (store.getShareId() && cloud.CLOUD_ENABLED) {
-      cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {})
-    } else if (cloud.CLOUD_ENABLED) {
-      cloud.upload(store.exportAll()).catch(() => {})
+    if (cloud.CLOUD_ENABLED) {
+      cloud.syncAll().catch(() => {})
     }
 
     this.setData({ showPicker: false, pickerId: '', pickerName: '' })
@@ -143,10 +141,8 @@ Page({
     const baby = store.getCurrentBaby()
     store.toggleVaccine(baby.id, id)
     this.refresh()
-    if (store.getShareId() && cloud.CLOUD_ENABLED) {
-      cloud.syncShare(store.getShareId(), store.exportAll()).catch(() => {}).then(() => { this._toggling = false })
-    } else if (cloud.CLOUD_ENABLED) {
-      cloud.upload(store.exportAll()).catch(() => {}).then(() => { this._toggling = false })
+    if (cloud.CLOUD_ENABLED) {
+      cloud.syncAll().catch(() => {}).then(() => { this._toggling = false })
     } else {
       this._toggling = false
     }

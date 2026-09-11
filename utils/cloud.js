@@ -68,20 +68,45 @@ function syncShare(shareId, payload) {
     .then(res => res.result)
 }
 
-// 自动同步：有 shareId 时拉取云端最新数据并 import（建议在页面 onShow 调用）
+// 自动同步：有 shareId 时拉取家庭共享数据，无 shareId 时从个人备份恢复
 function autoSync() {
   const store = require('./store.js')
   const shareId = store.getShareId()
-  if (!shareId || !ensureCloud()) return Promise.resolve(false)
-  return syncShare(shareId)
-    .then(res => {
-      if (res && res.success && res.payload) {
-        store.importAll(res.payload)
+  if (!ensureCloud()) return Promise.resolve(false)
+  if (shareId) {
+    return syncShare(shareId)
+      .then(res => {
+        if (res && res.success && res.payload) {
+          store.importAll(res.payload)
+          return true
+        }
+        return false
+      })
+      .catch(() => false)
+  }
+  // 无家庭共享时，从个人云端备份恢复（解决多端本地 Storage 不互通问题）
+  return download()
+    .then(payload => {
+      if (payload && payload.babies && payload.babies.length) {
+        store.importAll(payload)
         return true
       }
       return false
     })
     .catch(() => false)
+}
+
+// 统一同步：无论有无家庭共享，都先 upload 个人备份；有 shareId 时再 syncShare
+function syncAll() {
+  const store = require('./store.js')
+  const payload = store.exportAll()
+  if (!ensureCloud()) return Promise.resolve(false)
+  const tasks = [upload(payload)]
+  const shareId = store.getShareId()
+  if (shareId) {
+    tasks.push(syncShare(shareId, payload))
+  }
+  return Promise.all(tasks).then(() => true).catch(() => false)
 }
 
 // 上传文件到云存储，返回永久 cloud:// fileID（<image> 直接支持）
@@ -104,4 +129,4 @@ function uploadFile(tempPath, dir = 'photos') {
   })
 }
 
-module.exports = { CLOUD_ENABLED, upload, download, subscribe, createShare, joinShare, syncShare, autoSync, getMembers, uploadFile }
+module.exports = { CLOUD_ENABLED, upload, download, subscribe, createShare, joinShare, syncShare, autoSync, syncAll, getMembers, uploadFile }
